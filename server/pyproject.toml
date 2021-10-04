@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "kaguya-server"
+version = "0.1.0"
+description = "Server code for account aggregator hackaton by setu"
+authors = ["Clament <clament.john.k@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+edgedb = "^0.17.3"
+fastapi = "^0.68.1"
+pydantic = {extras = ["dotenv"], version = "^1.8.2"}
+loguru = "^0.5.3"
+uvicorn = "^0.15.0"
+httpx = "^0.19.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+aiofile = "^3.7.2"
+ipython = "^7.28.0"
+line-profiler = "^3.3.1"
+requests = "^2.26.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
