@@ -2,14 +2,14 @@ package dependencies
 
 object Versions {
 
-  const val compileSdk = 30
+  const val compileSdk = 31
   const val minSdk = 26
   const val targetSdk = 30
   const val versionCode = 1
   const val versionName = "0.1"
   const val jvmTarget = "1.8"
 
-  const val kotlin = "1.5.31"
+  const val kotlin = "1.5.21"
   const val gradle = "7.0.2"
   const val hilt = "2.38.1"
   const val junit5 = "1.8.0.0"
