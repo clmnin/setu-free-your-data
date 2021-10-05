@@ -40,6 +40,10 @@ async def generate_consent_request(phone_number: str) -> str:
 
 @app.post("/consent/fetch/{consent_handle}", response_model=Dict)
 async def consent_fetch_signed_consent(consent_handle: str):
+    """
+    This is for testing.
+    Pass the consent_handle and load the data into edgedb
+    """
     privateKey = await read_private_key()
     detatched_jws = make_detached_jws(privateKey, {"url": "/Consent/handle/" + consent_handle})
     async with httpx.AsyncClient() as client:
@@ -62,9 +66,6 @@ async def consent_fetch_signed_consent(consent_handle: str):
                 return {"status": "Too may requests"}
         else:
             return {"status": consent_status.status}
-
-
-
 
 
 @app.post("/Consent/Notification", response_model=NotificationResponse)
