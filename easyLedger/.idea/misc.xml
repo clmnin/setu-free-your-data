@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/ic_cashbook.xml" value="0.371875" />
         <entry key="app/src/main/res/drawable/ic_visa.xml" value="0.371875" />
       </map>
     </option>

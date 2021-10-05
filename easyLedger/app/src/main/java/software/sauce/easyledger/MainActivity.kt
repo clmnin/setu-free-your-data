@@ -22,15 +22,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import software.sauce.easyledger.ui.theme.EasyLedgerTheme
@@ -51,29 +44,23 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun SignInScreen() {
-    var username by remember {
+    var mobileNumber by remember {
         mutableStateOf("")
-    }
-    var password by remember {
-        mutableStateOf("")
-    }
-    var isPasswordVisible by remember {
-        mutableStateOf(false)
     }
     val isFormValid by derivedStateOf {
-        username.isNotBlank() && password.length >= 7
+        mobileNumber.isNotBlank() && mobileNumber.length == 10
     }
 
     Scaffold(backgroundColor = MaterialTheme.colors.primary) {
         Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
             Image(
-                painter = painterResource(id = R.drawable.ic_visa),
+                painter = painterResource(id = R.drawable.ic_cashbook),
                 contentDescription = "App Logo",
                 modifier = Modifier
                     .weight(1f)
-                    .size(200.dp),
-                colorFilter = ColorFilter.tint(Color.White)
+                    .size(200.dp)
             )
+            Text(text = "Easy Ledger", fontWeight = FontWeight.Bold, fontSize = 32.sp)
             Card(
                 Modifier
                     .weight(2f)
@@ -85,39 +72,20 @@ fun SignInScreen() {
                         .fillMaxSize()
                         .padding(32.dp)
                 ) {
-                    Text(text = "Welcome Back!", fontWeight = FontWeight.Bold, fontSize = 32.sp)
                     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                        Spacer(modifier = Modifier.weight(1f))
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth(),
-                            value = username,
-                            onValueChange = { username = it },
-                            label = { Text(text = "Username") },
+                            value = mobileNumber,
+                            onValueChange = { mobileNumber = it },
+                            label = { Text(text = "Mobile Number") },
                             singleLine = true,
                             trailingIcon = {
-                                if (username.isNotBlank())
-                                    IconButton(onClick = { username = "" }) {
+                                if (mobileNumber.isNotBlank())
+                                    IconButton(onClick = { mobileNumber = "" }) {
                                         Icon(imageVector = Icons.Filled.Clear, contentDescription = "")
                                     }
-                            }
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        OutlinedTextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            value = password,
-                            onValueChange = { password = it },
-                            label = { Text(text = "Password") },
-                            singleLine = true,
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
-                            visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                            trailingIcon = {
-                                IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
-                                    Icon(
-                                        imageVector = if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                                        contentDescription = "Password Toggle"
-                                    )
-                                }
-                            }
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Button(
@@ -135,9 +103,6 @@ fun SignInScreen() {
                         ) {
                             TextButton(onClick = {}) {
                                 Text(text = "Sign Up")
-                            }
-                            TextButton(onClick = { }) {
-                                Text(text = "Forgot Password?", color = Color.Gray)
                             }
                         }
                     }
