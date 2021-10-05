@@ -1,4 +1,4 @@
-package software.sauce.easyledger
+package software.sauce.easyledger.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -26,7 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import software.sauce.easyledger.ui.theme.EasyLedgerTheme
+import software.sauce.easyledger.R
+import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

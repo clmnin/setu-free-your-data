@@ -1,4 +1,4 @@
-package software.sauce.easyledger.ui.theme
+package software.sauce.easyledger.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
