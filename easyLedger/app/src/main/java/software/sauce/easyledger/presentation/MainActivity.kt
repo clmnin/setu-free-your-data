@@ -10,6 +10,7 @@ import software.sauce.easyledger.presentation.navigation.Screen
 import software.sauce.easyledger.presentation.ui.sign_in.SignInScreen
 
 import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
+import software.sauce.easyledger.presentation.ui.home.HomeScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +20,12 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = Screen.SignIn.route) {
                     composable(route = Screen.SignIn.route) { navBackStackEntry ->
-                        SignInScreen()
+                        SignInScreen(
+                            onNavigateToRecipeDetailScreen = navController::navigate,
+                        )
+                    }
+                    composable(route = Screen.Home.route) { navBackStackEntry ->
+                        HomeScreen()
                     }
                 }
             }
