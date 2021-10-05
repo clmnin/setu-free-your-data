@@ -1,9 +1,8 @@
 package software.sauce.easyledger.presentation.ui.anumati
 
+import android.util.Log
 import android.view.ViewGroup
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
@@ -14,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import software.sauce.easyledger.presentation.components.CenterOfScreen
 import software.sauce.easyledger.presentation.navigation.Screen
-import software.sauce.easyledger.utils.ConstantUrls.Companion.BASE_URL
 
 @Composable
 fun AnumatiWebView(
@@ -45,10 +43,6 @@ fun AnumatiWebView(
                         ViewGroup.LayoutParams.MATCH_PARENT
                     )
                     webViewClient = object : WebViewClient() {
-                        override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                            return false
-                        }
-
                         override fun onPageFinished(view: WebView?, url: String?) {
                             super.onPageFinished(view, url)
 
@@ -60,13 +54,24 @@ fun AnumatiWebView(
                             request: WebResourceRequest?
                         ): Boolean {
                             // cancel the current request if the url is the redirect url
-                            return if (request?.url.toString().contains(BASE_URL)) {
+                            return if (request?.url.toString().contains("/redirect")) {
                                 onNavigateToRecipeDetailScreen(Screen.Home.route)
                                 true
                             } else {
                                 false
                             }
                         }
+                    }
+                    webChromeClient = object : WebChromeClient(){
+                        override fun onConsoleMessage(message: ConsoleMessage): Boolean {
+                            Log.d("EzLedger", "${message.message()} -- From line " +
+                                    "${message.lineNumber()} of ${message.sourceId()}")
+                            return true
+                        }
+                    }
+                    settings.apply {
+                        javaScriptEnabled = true
+                        domStorageEnabled = true
                     }
                     loadUrl(consentUrl)
                 }
