@@ -5,7 +5,7 @@ import json
 
 async def read_private_key() -> str:
     try:
-        async with async_open("./keys/private_key.pem", 'r') as afp:
+        async with async_open("./app/keys/private_key.pem", 'r') as afp:
             privateKey = await afp.read(length=-1)
     except Exception as e:
         raise HTTPException(
@@ -17,7 +17,7 @@ async def read_private_key() -> str:
 
 async def read_public_key() -> str:
     try:
-        async with async_open("./keys/setu_public_key.json", 'r') as afp:
+        async with async_open("./app/keys/setu_public_key.json", 'r') as afp:
             pub_key_str = await afp.read(length=-1)
             pub_key = json.loads(pub_key_str)
     except Exception as e:
