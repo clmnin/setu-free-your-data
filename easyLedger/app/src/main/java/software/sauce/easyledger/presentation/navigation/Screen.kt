@@ -5,4 +5,5 @@ sealed class Screen(
 ){
     object SignIn: Screen("signIn")
     object Home: Screen("home")
+    object Anumati: Screen("anumati")
 }

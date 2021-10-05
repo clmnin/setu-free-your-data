@@ -69,7 +69,10 @@ fun SignInScreen(
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             Button(
-                                onClick = { onNavigateToRecipeDetailScreen(Screen.Home.route) },
+                                onClick = {
+                                    val route = Screen.Anumati.route + "/${mobileNumber}"
+                                    onNavigateToRecipeDetailScreen(route)
+                                },
                                 enabled = isFormValid,
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(16.dp)
