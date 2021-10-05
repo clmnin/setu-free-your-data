@@ -1,17 +1,30 @@
+import dependencies.AnnotationProcessing
+import dependencies.InstrumentationTest
+import dependencies.Jetbrains
+import dependencies.Square
+import dependencies.UnitTest
+import dependencies.Versions
+import dependencies.AndroidX
+import dependencies.Google
+import dependencies.Coil
+
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id "de.mannodermaus.android-junit5"
 }
 
 android {
-    compileSdk 31
+    compileSdkVersion Versions.compileSdk
 
     defaultConfig {
         applicationId "software.sauce.easyledger"
-        minSdk 26
-        targetSdk 31
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion Versions.minSdk
+        targetSdkVersion Versions.targetSdk
+        versionCode Versions.versionCode
+        versionName Versions.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -30,15 +43,18 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = Versions.jvmTarget
         useIR = true
     }
     buildFeatures {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.5.21'
+        def kotlin_compiler_extension_version = Versions.compose
+        kotlinCompilerExtensionVersion kotlin_compiler_extension_version
+
+        def kotlin_compiler_version = Versions.kotlin
+        kotlinCompilerVersion kotlin_compiler_version
     }
     packagingOptions {
         resources {
@@ -49,18 +65,48 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.compose.material:material-icons-extended:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.1'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    implementation AndroidX.core_ktx
+    implementation AndroidX.app_compat
+    implementation AndroidX.constraint_layout
+    implementation AndroidX.nav_fragment_ktx // will remove later
+    implementation AndroidX.nav_ui_ktx // will remove later
+    implementation AndroidX.compose_ui
+    implementation AndroidX.compose_foundation
+    implementation AndroidX.compose_material
+    implementation AndroidX.compose_icons_core
+    implementation AndroidX.compose_icons_extended
+    implementation AndroidX.constraint_compose
+    implementation AndroidX.navigation_compose
+    implementation AndroidX.compose_activity
+    implementation AndroidX.navigation_hilt
+    implementation AndroidX.room_runtime
+    implementation AndroidX.room_ktx
+    implementation AndroidX.datastore
+    implementation AndroidX.hilt_lifecycle_viewmodel
+
+    implementation Google.material
+    implementation Google.hilt_android
+
+    implementation Coil.coil
+
+    implementation Jetbrains.kotlin_stdlib
+
+    implementation Square.retrofit
+    implementation Square.retrofit_gson
+    implementation Square.okHttp
+    implementation Square.leak_canary
+
+    kapt AnnotationProcessing.hilt_compiler
+    kapt AnnotationProcessing.room_compiler
+
+    // TESTING
+    testImplementation UnitTest.jupiter_api
+    testRuntimeOnly UnitTest.jupiter_engine
+
+    // Mock web server
+    testImplementation UnitTest.mock_web_server
+//    testImplementation UnitTest.okHttp // include this if you get issues
+
+    // compose testing
+    implementation InstrumentationTest.compose_ui
 }
