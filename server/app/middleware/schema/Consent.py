@@ -41,7 +41,7 @@ class ConsentStatusEnum(str, Enum):
 
 class ConsentStatusResponse(BaseModel):
     status: ConsentStatusEnum
-    fi_types: List[FiTypesEnum]
+    fi_types: Optional[List[FiTypesEnum]]
 
 
 class ConsentStatus(BaseModel):
