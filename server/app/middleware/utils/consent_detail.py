@@ -2,8 +2,10 @@ from typing import Dict
 import uuid
 import datetime as dt
 
+from app.middleware.schema.Consent import CreateConsent
 
-def create_date(mobile_number: str) -> Dict:
+
+def create_date(data: CreateConsent) -> Dict:
     date_now = dt.datetime.now()
     expiry = date_now + dt.timedelta(seconds=600000)
     data = {
@@ -13,29 +15,29 @@ def create_date(mobile_number: str) -> Dict:
         "ConsentDetail": {
             "consentStart": date_now.strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
             "consentExpiry": expiry.strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
-            "consentMode": "VIEW",
-            "fetchType": "ONETIME",
+            "consentMode": "STORE",
+            "fetchType": "PERIODIC",
             "consentTypes": ["TRANSACTIONS", "PROFILE", "SUMMARY"],
-            "fiTypes": ["DEPOSIT"],
-            "DataConsumer": { "id": "FIU" },
-            "Customer": {"id": mobile_number + "@setu-aa"},
+            "fiTypes": data.fi_types,
+            "DataConsumer": {"id": "FIU"},
+            "Customer": {"id": data.phone + "@setu-aa"},
             "Purpose": {
-                "code": "101",
+                "code": "104",  # Explicit consent to monitor the accounts
                 "refUri": "https://api.rebit.org.in/aa/purpose/101.xml",
-                "text": "Wealth management service",
+                "text": "Automatic Ledger Management",
                 "Category": {"type": "string"},
             },
             "FIDataRange": {
                 "from": "2021-01-06T11:39:57.153Z",
                 "to": "2021-06-30T14:25:33.440Z",
             },
-            "DataLife": {"unit": "MONTH", "value": 0},
-            "Frequency": {"unit": "MONTH", "value": 5},
+            "DataLife": {"unit": "MONTH", "value": 1},
+            "Frequency": {"unit": "HOUR", "value": 96},
             "DataFilter": [
                 {
                     "type": "TRANSACTIONAMOUNT",
                     "operator": ">=",
-                    "value": "10",
+                    "value": "1",
                 },
             ],
         }

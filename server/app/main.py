@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Optional
 
 from fastapi import FastAPI, Header, HTTPException, status
 import httpx
@@ -9,9 +9,8 @@ import uuid
 
 from app.middleware.consent_notification import fetch_signed_consent
 from app.middleware.local_file import read_public_key, read_private_key
-from app.middleware.schema.Consent import CheckConsentResponse
+from app.middleware.schema.Consent import CheckConsentResponse, CreateConsent, ConsentStatusResponse, ConsentStatus, ConsentStatusEnum
 from app.middleware.schema.Notification import ConsentNotificationRequest, NotificationResponse
-from app.middleware.schema.response import ConsentStatus
 from app.middleware.utils.consent_detail import create_date
 from app.middleware.utils.request_signing import make_detached_jws, validate_detached_jws
 from app.middleware.config import settings
@@ -19,12 +18,14 @@ from app.middleware.config import settings
 app = FastAPI()
 
 
-@app.get("/consent/{phone_number}", response_model=str)
-async def generate_consent_request(phone_number: str) -> str:
+@app.post("/consent", response_model=str)
+async def generate_consent_request(data: CreateConsent) -> str:
     """
     Generate a consent request and respond with url for user to accept consent
+
+    Pass the phone number and the FI Data types accepted by the user
     """
-    body = create_date(phone_number)
+    body = create_date(data)
     privateKey = await read_private_key()
     detatched_jws = make_detached_jws(privateKey, body)
     async with httpx.AsyncClient() as client:
@@ -38,8 +39,8 @@ async def generate_consent_request(phone_number: str) -> str:
         return url
 
 
-@app.post("/consent/fetch/{consent_handle}", response_model=Dict)
-async def consent_fetch_signed_consent(consent_handle: str):
+@app.get("/consent/{consent_handle}", response_model=ConsentStatusResponse)
+async def consent_fetch_signed_consent(consent_handle: str) -> ConsentStatusResponse:
     """
     This is for testing.
     Pass the consent_handle and load the data into edgedb
@@ -57,15 +58,14 @@ async def consent_fetch_signed_consent(consent_handle: str):
         # This can be `PENDING` or `READY`
         c = CheckConsentResponse.parse_obj(res)
         consent_status = ConsentStatus(id=c.ConsentStatus.id, status=c.ConsentStatus.status)
-        if consent_status.status == "READY":
-            aa_data = await fetch_signed_consent(str(consent_status.id))
-            if aa_data:
-                print(json.loads(aa_data))
-                return {"status": consent_status.status}
+        if consent_status.status == ConsentStatusEnum.READY:
+            aa_fetch_status = await fetch_signed_consent(str(consent_status.id))
+            if not aa_fetch_status:
+                return ConsentStatusResponse(status=ConsentStatusEnum.ERROR)
             else:
-                return {"status": "Too may requests"}
+                return ConsentStatusResponse(status=ConsentStatusEnum.READY, fi_types=aa_fetch_status)
         else:
-            return {"status": consent_status.status}
+            return ConsentStatusResponse(status=consent_status.status)
 
 
 @app.post("/Consent/Notification", response_model=NotificationResponse)
