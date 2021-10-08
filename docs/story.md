@@ -17,14 +17,14 @@ PYTHONPATH=. poetry run python scripts/init/load_demo_data.py
 - [x] OTP
 - [x] Auth
 - [ ] View pre generated data - user, companies, aas, bank account details
-- [ ] Create company
-- [ ] On boarding screen for AA
-- [ ] Link your bank accounts
 - [ ] Dashboard for each company
   - [ ] Bank Balance
   - [ ] Receivable
   - [ ] Payable
-- [ ] 
+- [ ] Create company
+- [ ] On boarding screen for AA
+- [ ] Link your bank accounts (request for summary, transactions and profile)
+- [ ] Request for extra info - credit card, insurance, etc (request only for summary)
 
 
 
