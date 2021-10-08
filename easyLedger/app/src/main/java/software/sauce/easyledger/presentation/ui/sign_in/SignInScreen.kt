@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -40,7 +41,7 @@ fun SignInScreen(
                         .weight(1f)
                         .size(200.dp)
                 )
-                Text(text = "Easy Ledger", fontWeight = FontWeight.Bold, fontSize = 32.sp)
+                Text(text = stringResource(id = R.string.app_name), fontWeight = FontWeight.Bold, fontSize = 32.sp)
                 Card(
                     Modifier
                         .weight(2f)
