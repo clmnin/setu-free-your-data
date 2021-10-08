@@ -21,7 +21,7 @@ import software.sauce.easyledger.presentation.navigation.Screen
 import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
 
 @Composable
-fun MobileNumberScreen(
+fun SignInAndOtp(
     onNavigateToRecipeDetailScreen: (String) -> Unit,
     textFieldText: String = "Mobile Number",
     textFieldLength: Int = 10,

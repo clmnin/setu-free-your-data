@@ -18,7 +18,7 @@ import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
 import software.sauce.easyledger.presentation.ui.anumati.AnumatiViewModel
 import software.sauce.easyledger.presentation.ui.anumati.AnumatiWebView
 import software.sauce.easyledger.presentation.ui.home.HomeScreen
-import software.sauce.easyledger.presentation.ui.sign_in.MobileNumberScreen
+import software.sauce.easyledger.presentation.ui.sign_in.SignInAndOtp
 import software.sauce.easyledger.presentation.utils.ConnectivityManager
 import javax.inject.Inject
 
@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = Screen.SignIn.route) {
                     composable(route = Screen.SignIn.route) { navBackStackEntry ->
-                        MobileNumberScreen(
+                        SignInAndOtp(
                             onNavigateToRecipeDetailScreen = navController::navigate,
                             nextScreen = { path ->
                                 if (path != "9999999999") {
@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
                         route = Screen.ValidateOTP.route + "/{phone}",
                         arguments = listOf(navArgument("phone") { type = NavType.StringType }),
                     ) { navBackStackEntry ->
-                        MobileNumberScreen(
+                        SignInAndOtp(
                             onNavigateToRecipeDetailScreen = navController::navigate,
                             textFieldText = "Enter OTP send to ${navBackStackEntry.arguments?.getString("phone") ?: ""}",
                             buttonText = "Submit OTP",

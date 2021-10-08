@@ -5,6 +5,6 @@ import retrofit2.http.Path
 
 interface BackendService {
 
-    @GET("/consent/{phone}")
+    @GET("api/v1/consent/{phone}")
     suspend fun requestConsent(@Path("phone") phone: String): String
 }
