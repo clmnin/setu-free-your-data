@@ -18,7 +18,7 @@ import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
 import software.sauce.easyledger.presentation.ui.anumati.AnumatiViewModel
 import software.sauce.easyledger.presentation.ui.anumati.AnumatiWebView
 import software.sauce.easyledger.presentation.ui.home.HomeScreen
-import software.sauce.easyledger.presentation.ui.sign_in.SignInScreen
+import software.sauce.easyledger.presentation.ui.sign_in.MobileNumberScreen
 import software.sauce.easyledger.presentation.utils.ConnectivityManager
 import javax.inject.Inject
 
@@ -48,8 +48,33 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = Screen.SignIn.route) {
                     composable(route = Screen.SignIn.route) { navBackStackEntry ->
-                        SignInScreen(
+                        MobileNumberScreen(
                             onNavigateToRecipeDetailScreen = navController::navigate,
+                            nextScreen = { path ->
+                                if (path != "9999999999") {
+                                    null
+                                } else {
+                                    Screen.ValidateOTP.route + "/$path"
+                                }
+                            }
+                        )
+                    }
+                    composable(
+                        route = Screen.ValidateOTP.route + "/{phone}",
+                        arguments = listOf(navArgument("phone") { type = NavType.StringType }),
+                    ) { navBackStackEntry ->
+                        MobileNumberScreen(
+                            onNavigateToRecipeDetailScreen = navController::navigate,
+                            textFieldText = "Enter OTP send to ${navBackStackEntry.arguments?.getString("phone") ?: ""}",
+                            buttonText = "Submit OTP",
+                            textFieldLength = 6,
+                            nextScreen = { otp ->
+                                if (otp != "123456") {
+                                    null
+                                } else {
+                                    Screen.Home.route
+                                }
+                            }
                         )
                     }
                     composable(route = Screen.Home.route) { navBackStackEntry ->

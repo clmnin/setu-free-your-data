@@ -21,15 +21,21 @@ import software.sauce.easyledger.presentation.navigation.Screen
 import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
 
 @Composable
-fun SignInScreen(
+fun MobileNumberScreen(
     onNavigateToRecipeDetailScreen: (String) -> Unit,
+    textFieldText: String = "Mobile Number",
+    textFieldLength: Int = 10,
+    buttonText: String = "Send OTP",
+    nextScreen: (String) -> String?,
 ) {
     var mobileNumber by remember {
         mutableStateOf("")
     }
     val isFormValid by derivedStateOf {
-        mobileNumber.isNotBlank() && mobileNumber.length == 10
+        mobileNumber.isNotBlank() && mobileNumber.length == textFieldLength
     }
+
+    val openDialog = remember { mutableStateOf(false) }
 
     EasyLedgerTheme() {
         Scaffold(backgroundColor = MaterialTheme.colors.primary) {
@@ -58,7 +64,7 @@ fun SignInScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 value = mobileNumber,
                                 onValueChange = { mobileNumber = it },
-                                label = { Text(text = "Mobile Number") },
+                                label = { Text(text = textFieldText) },
                                 singleLine = true,
                                 trailingIcon = {
                                     if (mobileNumber.isNotBlank())
@@ -71,26 +77,47 @@ fun SignInScreen(
                             Spacer(modifier = Modifier.height(16.dp))
                             Button(
                                 onClick = {
-                                    val route = Screen.Anumati.route + "/${mobileNumber}"
-                                    onNavigateToRecipeDetailScreen(route)
+                                    // TODO: Add dialog asking for confirmation (send OTP, cancel)
+                                    val route = nextScreen(mobileNumber)
+                                    if (route == null) {
+                                        openDialog.value = true
+                                    } else {
+                                        onNavigateToRecipeDetailScreen(route)
+                                    }
                                 },
                                 enabled = isFormValid,
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(16.dp)
                             ) {
-                                Text(text = "Log In")
+                                Text(text = buttonText)
                             }
                             Spacer(modifier = Modifier.weight(1f))
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                TextButton(onClick = {}) {
-                                    Text(text = "Sign Up")
-                                }
-                            }
                         }
                     }
+                }
+                if (openDialog.value) {
+                    AlertDialog(
+                        onDismissRequest = {
+                            // Dismiss the dialog when the user clicks outside the dialog or on the back
+                            // button. If you want to disable that functionality, simply use an empty
+                            // onCloseRequest.
+                            openDialog.value = false
+                        },
+                        title = {
+                            Text(text = "Invalid Input")
+                        },
+                        text = {
+                            Text("Please check the number you've typed and try again")
+                        },
+                        confirmButton = {
+                            Button(
+                                onClick = {
+                                    openDialog.value = false
+                                }) {
+                                Text("Ok")
+                            }
+                        }
+                    )
                 }
             }
         }
