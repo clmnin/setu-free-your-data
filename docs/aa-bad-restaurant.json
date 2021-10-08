@@ -1,0 +1,118 @@
+{
+    "name": "Bad Restaurant",
+    "phone": "9999999996",
+    "data": [{
+        "account": {
+            "linkedAccRef": "15744a08-ce1e-4df6-bd90-e12de2f59636",
+            "maskedAccNumber": "XXXXXXX123",
+            "type": "deposit",
+            "version": "1.1",
+            "transactions": {
+                "endDate": "2021-09-23T14:25:33.440Z",
+                "startDate": "2021-10-08T11:39:57.153Z",
+                "transaction": [{
+                    "mode": "FT",
+                    "type": "CREDIT",
+                    "txnId": "M61530881",
+                    "amount": "60000",
+                    "text": "Swiggy",
+                    "narration": "MMT/IMPS/009900356311/Swiggy/Swiggy/HDFC0000847",
+                    "reference": "RFN02209245",
+                    "valueDate": "2021-09-23",
+                    "currentBalance": "0",
+                    "transactionTimestamp": "2021-09-23T23:09:17+05:30"
+                }, {
+                    "mode": "FT",
+                    "type": "DEBIT",
+                    "txnId": "M61530882",
+                    "amount": "50000",
+                    "text": "WholeSaler 1",
+                    "narration": "MMT/IMPS/009900356311/payment/SAILAKSHMI/HDFC0000847 ",
+                    "reference": "RFN02221651",
+                    "valueDate": "2021-09-23",
+                    "currentBalance": "60000",
+                    "transactionTimestamp": "2021-09-23T23:14:28+05:30"
+                }, {
+                    "mode": "UPI",
+                    "type": "DEBIT",
+                    "txnId": "M61530883",
+                    "amount": "1806",
+                    "text": "WholeSaler 1",
+                    "narration": "UPI/935314560764/wholesaler1/wholesaler1@axisbank/Axis Bank",
+                    "reference": "RFN00013383",
+                    "valueDate": "2021-09-24",
+                    "currentBalance": "10000.00",
+                    "transactionTimestamp": "2021-09-24T13:20:14+05:30"
+                }, {
+                    "mode": "OTHER",
+                    "type": "DEBIT",
+                    "txnId": "M61530884",
+                    "amount": "3000",
+                    "text": "ATM",
+                    "narration": "ATM Withdrawal",
+                    "reference": "RFN02172080",
+                    "valueDate": "2021-09-25",
+                    "currentBalance": "8194",
+                    "transactionTimestamp": "2021-09-25T14:47:18+05:30"
+                }, {
+                    "mode": "UPI",
+                    "type": "DEBIT",
+                    "txnId": "M61530885",
+                    "amount": "2612",
+                    "text": "WholeSaler 2",
+                    "narration": "UPI/935314560764/wholesaler2/wholesaler2@axisbank/Axis Bank",
+                    "reference": "RFN02172080",
+                    "valueDate": "2021-09-26",
+                    "currentBalance": "5194",
+                    "transactionTimestamp": "2021-09-26T14:47:18+05:30"
+                }, {
+                    "mode": "UPI",
+                    "type": "DEBIT",
+                    "txnId": "M61530886",
+                    "amount": "2500",
+                    "text": "WholeSaler 2",
+                    "narration": "UPI/935314560764/wholesaler2/wholesaler2@axisbank/Axis Bank",
+                    "reference": "RFN02172080",
+                    "valueDate": "2021-09-27",
+                    "currentBalance": "2582",
+                    "transactionTimestamp": "2021-09-27T14:47:18+05:30"
+                }]
+            },
+            "profile": {
+                "holders": {
+                    "type": "Single",
+                    "holder": [{
+                        "dob": "1970-07-24T23:59:59+05:30",
+                        "pan": "AAAPL1234C",
+                        "name": "Bad Restaurant",
+                        "email": "bad.restaurant@gmail.com",
+                        "mobile": "9999999998",
+                        "address": "4/1290, 785th Cross, 13rd Main, 7th Block, Bangalore - 569911",
+                        "nominee": "REGISTERED",
+                        "landline": "",
+                        "ckycCompliance": "true"
+                    }]
+                }
+            },
+            "summary": {
+                "type": "CURRENT",
+                "branch": "Jayanagar 7th Block",
+                "status": "ACTIVE",
+                "pending": {
+                    "amount": "0",
+                    "transactionType": "DEBIT"
+                },
+                "currency": "INR",
+                "facility": "",
+                "ifscCode": "APNB0001154",
+                "micrCode": "500245646",
+                "exchgeRate": "",
+                "openingDate": "06-08-1999",
+                "drawingLimit": "0",
+                "currentBalance": "82",
+                "currentODLimit": "0",
+                "balanceDateTime": "2021-10-07T13:20:00+05:30"
+            }
+        }
+    }]
+}

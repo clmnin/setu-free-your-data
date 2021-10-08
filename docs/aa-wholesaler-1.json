@@ -1,0 +1,211 @@
+{
+    "name": "Wholesaler 1",
+    "phone": "9999999997",
+    "data": [{
+        "account": {
+            "linkedAccRef": "15744a08-ce1e-4df6-bd90-e12de2f59636",
+            "maskedAccNumber": "XXXXXXX123",
+            "type": "deposit",
+            "version": "1.1",
+            "transactions": {
+                "endDate": "2021-09-23T14:25:33.440Z",
+                "startDate": "2021-10-08T11:39:57.153Z",
+                "transaction": [{
+                    "mode": "FT",
+                    "type": "CREDIT",
+                    "txnId": "M61530882",
+                    "amount": "50000",
+                    "text": "Restaurant 1",
+                    "narration": "MMT/IMPS/009900356311/payment/SAILAKSHMI/HDFC0000847 ",
+                    "reference": "RFN02221651",
+                    "valueDate": "2021-09-23",
+                    "currentBalance": "1200000",
+                    "transactionTimestamp": "2021-09-23T23:14:28+05:30"
+                }, {
+                    "mode": "UPI",
+                    "type": "CREDIT",
+                    "txnId": "M61530883",
+                    "amount": "1806",
+                    "text": "Restaurant 1",
+                    "narration": "UPI/935314560764/restaurant1/restaurant1@axisbank/Axis Bank",
+                    "reference": "RFN00013383",
+                    "valueDate": "2021-09-24",
+                    "currentBalance": "1250000",
+                    "transactionTimestamp": "2021-09-24T13:20:14+05:30"
+                }, {
+                    "mode": "FT",
+                    "type": "CREDIT",
+                    "txnId": "M61530897",
+                    "amount": "20000",
+                    "text": "Restaurant 2",
+                    "narration": "MMT/IMPS/009900356311/payment/SAILAKSHMI/HDFC0000847 ",
+                    "reference": "RFN02221651",
+                    "valueDate": "2021-10-07",
+                    "currentBalance": "1270000",
+                    "transactionTimestamp": "2021-10-07T23:14:28+05:30"
+                }]
+            },
+            "profile": {
+                "holders": {
+                    "type": "Single",
+                    "holder": [{
+                        "dob": "1970-07-24T23:59:59+05:30",
+                        "pan": "AAAPL1234C",
+                        "name": "Wholesaler 1",
+                        "email": "wholesaler1@gmail.com",
+                        "mobile": "9999999997",
+                        "address": "4/1290, 785th Cross, 13rd Main, 7th Block, Bangalore - 569911",
+                        "nominee": "REGISTERED",
+                        "landline": "",
+                        "ckycCompliance": "true"
+                    }]
+                }
+            },
+            "summary": {
+                "type": "SAVINGS",
+                "branch": "Jayanagar 7th Block",
+                "status": "ACTIVE",
+                "pending": {
+                    "amount": "0",
+                    "transactionType": "DEBIT"
+                },
+                "currency": "INR",
+                "facility": "",
+                "ifscCode": "APNB0001154",
+                "micrCode": "500245646",
+                "exchgeRate": "",
+                "openingDate": "06-08-1999",
+                "drawingLimit": "0",
+                "currentBalance": "101666.33",
+                "currentODLimit": "0",
+                "balanceDateTime": "2021-09-07T13:20:00+05:30"
+            }
+        }
+    }, {
+        "account": {
+            "linkedAccRef": "22fa6677-4104-462a-af63-9b329337bbff",
+            "maskedAccNumber": "XXXXXXXXYB79",
+            "type": "term_deposit",
+            "version": "1.1",
+            "summary": {
+                "ifsc": "APNB0001154",
+                "branch": "Jayanagar 7th Block",
+                "tenureDays": "180",
+                "accountType": "FIXED",
+                "description": "",
+                "openingDate": "06-08-2019",
+                "tenureYears": "0.5",
+                "currentValue": "119845.90",
+                "interestRate": "2",
+                "maturityDate": "12-11-2021",
+                "tenureMonths": "6",
+                "interestPayout": "HALF-YEARLY",
+                "maturityAmount": "10.0",
+                "principalAmount": "109890.98",
+                "recurringAmount": "2453",
+                "interestOnMaturity": "",
+                "interestComputation": "COMPOUND",
+                "recurringDepositDay": "06-08-2019",
+                "compoundingFrequency": "HALF-YEARLY",
+                "interestPeriodicPayoutAmount": ""
+            }
+        }
+    }, {
+        "account": {
+            "linkedAccRef": "1fe6fca0-fa19-42cb-9df5-855a9b7569d7",
+            "maskedAccNumber": "XXXXXXXXT79H",
+            "type": "recurring_deposit",
+            "version": "1.1",
+            "summary": {
+                "ifsc": "APNB0001154",
+                "branch": "Jayanagar 7th Block",
+                "tenureDays": "180",
+                "accountType": "FIXED",
+                "description": "",
+                "openingDate": "06-08-2019",
+                "tenureYears": "0.5",
+                "currentValue": "119845.90",
+                "interestRate": "2",
+                "maturityDate": "12-11-2021",
+                "tenureMonths": "6",
+                "interestPayout": "HALF-YEARLY",
+                "maturityAmount": "10.0",
+                "principalAmount": "109890.98",
+                "recurringAmount": "2453",
+                "interestOnMaturity": "",
+                "interestComputation": "COMPOUND",
+                "recurringDepositDay": "06-08-2019",
+                "compoundingFrequency": "HALF-YEARLY",
+                "interestPeriodicPayoutAmount": ""
+            }
+        }
+    }, {
+        "account": {
+            "linkedAccRef": "b26df801-3b0f-4c99-86ad-7dd7e8881c1d",
+            "maskedAccNumber": "XXXXXXCR56",
+            "type": "credit_card",
+            "version": "1.0",
+            "summary": {
+                "dueDate": "20-09-2021",
+                "cashLimit": "20000",
+                "currentDue": "3000",
+                "creditLimit": "60000",
+                "minDueAmount": "1346",
+                "loyaltyPoints": "2450",
+                "financeCharges": "2368",
+                "totalDueAmount": "9756",
+                "availableCredit": "51345",
+                "lastStatementDate": "20-05-2021",
+                "previousDueAmount": "7654"
+            }
+        }
+    }, {
+        "account": {
+            "linkedAccRef": "644ea31c-d067-40ec-8919-55fdcaf58c29",
+            "maskedAccNumber": "XXXXXXX789",
+            "type": "insurance_policies",
+            "version": "1.0",
+            "summary": {
+                "covers": {
+                    "cover": [{
+                        "amount": "120000",
+                        "description": ""
+                    }]
+                },
+                "coverType": "GOODS",
+                "eiaNumber": "TY67HG5THL",
+                "moneyBacks": {
+                    "moneyBack": [{
+                        "date": "12-03-28",
+                        "amount": "1000",
+                        "description": ""
+                    }]
+                },
+                "policyName": "APNA Business Insurance",
+                "policyType": "BUSINESS_PLAN",
+                "sumAssured": "1500000",
+                "coverAmount": "1300000",
+                "tenureYears": "12",
+                "maturityDate": "2004-04-12",
+                "policyNumber": "APNI789008",
+                "tenureMonths": "144",
+                "premiumAmount": "1600000",
+                "contractClauses": {
+                    "contractClause": [{
+                        "title": "Business Plan",
+                        "amount": "75000",
+                        "subLimit": "",
+                        "conditions": "",
+                        "exlcusions": "",
+                        "description": ""
+                    }]
+                },
+                "maturityBenefit": "",
+                "policyStartDate": "12-03-2021",
+                "premiumFrequency": "HALF_YEARLY",
+                "premiumPaymentYears": "2",
+                "premiumPaymentMonths": "24"
+            }
+        }
+    }]
+}
