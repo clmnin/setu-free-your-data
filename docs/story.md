@@ -2,9 +2,8 @@
 
 ## Flow
 
-- [ ] Add Firebase
-- [ ] Firebase crashalytics
-- [ ] Firebase auth
+- [x] Add Firebase
+- [x] Firebase crashalytics
 - [ ] Phone
 - [ ] OTP
 - [ ] Create company
