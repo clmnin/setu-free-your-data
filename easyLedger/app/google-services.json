@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "867914339344",
+    "project_id": "ez-ledger",
+    "storage_bucket": "ez-ledger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867914339344:android:8ce5baebd8c4e658d32695",
+        "android_client_info": {
+          "package_name": "software.sauce.easyledger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "867914339344-v3aug33ko65jbvamau77jtnaqpveo93e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyk8RlaEv8vh6UOehMEKNPorbNNBf2qJc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "867914339344-v3aug33ko65jbvamau77jtnaqpveo93e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
