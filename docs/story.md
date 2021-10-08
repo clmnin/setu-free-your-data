@@ -1,11 +1,22 @@
 # Story
 
+## Commands to restart a new server
+
+```shell
+edgedb instance destroy easyledger_server
+edgedb instance create easyledger_server --method=docker
+edgedb -I easyledger_server migration apply
+PYTHONPATH=. poetry run python scripts/init/load_demo_data.py
+```
+
 ## Flow
 
 - [x] Add Firebase
 - [x] Firebase crashalytics
-- [ ] Phone
-- [ ] OTP
+- [x] Phone
+- [x] OTP
+- [x] Auth
+- [ ] View pre generated data - user, companies, aas, bank account details
 - [ ] Create company
 - [ ] On boarding screen for AA
 - [ ] Link your bank accounts

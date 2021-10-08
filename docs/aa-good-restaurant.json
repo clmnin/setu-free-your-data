@@ -190,7 +190,7 @@
             "type": "credit_card",
             "version": "1.0",
             "summary": {
-                "dueDate": "20-09-2021",
+                "dueDate": "20-10-2021",
                 "cashLimit": "20000",
                 "currentDue": "3000",
                 "creditLimit": "60000",
