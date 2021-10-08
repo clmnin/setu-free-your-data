@@ -1,6 +1,14 @@
+from typing import List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel
+
+
+class TokenPayload(BaseModel):
+    """
+    UserToken encoded as string using jose.jwt
+    """
+    sub: str
 
 
 class UserToken(BaseModel):
@@ -8,6 +16,7 @@ class UserToken(BaseModel):
     Decoded token. Used all around the app to validate a user
     """
     id: UUID
+    companies: Optional[List[UUID]] = None
 
 
 class Token(BaseModel):

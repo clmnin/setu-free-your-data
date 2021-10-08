@@ -1,12 +1,14 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 import httpx
 import json
 
+from app.middleware.auth import get_current_active_user
 from app.middleware.consent_notification import fetch_signed_consent
 from app.middleware.local_file import read_private_key
 from app.middleware.schema.Consent import (
     CheckConsentResponse, CreateConsent, ConsentStatusResponse, ConsentStatus, ConsentStatusEnum
 )
+from app.middleware.schema.users import UserProfile
 from app.middleware.utils.consent_detail import create_date
 from app.middleware.utils.request_signing import make_detached_jws
 from app.middleware.config import settings
@@ -16,7 +18,10 @@ router = APIRouter()
 
 
 @router.post("", response_model=str)
-async def generate_consent_request(data: CreateConsent) -> str:
+async def generate_consent_request(
+        data: CreateConsent,
+        current_user: UserProfile = Depends(get_current_active_user)
+) -> str:
     """
     Generate a consent request and respond with url for user to accept consent
 
@@ -37,7 +42,10 @@ async def generate_consent_request(data: CreateConsent) -> str:
 
 
 @router.get("/{consent_handle}", response_model=ConsentStatusResponse)
-async def consent_fetch_signed_consent(consent_handle: str) -> ConsentStatusResponse:
+async def consent_fetch_signed_consent(
+        consent_handle: str,
+        current_user: UserProfile = Depends(get_current_active_user)
+) -> ConsentStatusResponse:
     """
     This is for testing.
     Pass the consent_handle and load the data into edgedb

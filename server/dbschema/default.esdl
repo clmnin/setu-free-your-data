@@ -1,7 +1,16 @@
 module default {
+    scalar type LedgerGlobalNo extending sequence;
     scalar type FiTypes extending enum<DEPOSIT, TERM_DEPOSIT, RECURRING_DEPOSIT, CREDIT_CARD, INSURANCE_POLICIES>;
     scalar type DepositAccType extending enum<SAVINGS, CURRENT>;
     scalar type TransactionType extending enum<DEBIT, CREDIT>;
+    abstract type FDDeposit {
+        required property maskedAccNumber -> str;
+        required property ifsc -> str;
+        required property branch -> str;
+        required property tenureDays -> int32;
+        required property accountType -> str;
+        required property currentValue -> int32;
+    }
 
     # Main User account - not linked with AA
     # here a user can add multiple AA data into a single User account
@@ -11,7 +20,7 @@ module default {
         required property phone -> str {
             constraint exclusive;
         };
-        multi link aa -> AAAccount;
+        multi link company -> Company;
         property is_active -> bool {
             default := true;
         }
@@ -23,30 +32,40 @@ module default {
         }
     }
 
+    type Company {
+        required property name -> str {
+            constraint exclusive;
+            constraint max_len_value(100);
+            constraint regexp('^[a-z0-9]+(?:-[a-z0-9]+)*$')
+        };
+        required property display_name -> str {
+            constraint max_len_value(200);
+        };
+        property create_date -> datetime {
+            default := (SELECT datetime_current());
+        }
+        property write_date -> datetime {
+            default := (SELECT datetime_current());
+        }
+        # only one AA account per company in this build
+        link aa -> AAAccount;
+    }
     type AAAccount {
-        required property phone -> str;
+        required property phone -> str {
+            constraint exclusive;
+        };
         property name -> str;
         property email -> str;
         property dob -> datetime;
         property pan -> str;
-        # required property fi_types -> array(FiTypes); # array of FiTypes
-        multi link fi ->  FIBasic;
+        link fi_deposit ->  Deposit;
+        link fi_term ->  TermDeposit;
+        link fi_recurring ->  RecurringDeposit;
+        link fi_credit_card ->  CreditCard;
+        link fi_insurance ->  Insurance;
     }
-
-    abstract type FIBasic {
+    type Deposit {
         required property maskedAccNumber -> str;
-        multi link transactions -> TransactionLine;
-    }
-
-    abstract type FDDeposit extending FIBasic {
-        required property ifsc -> str;
-        required property branch -> str;
-        required property tenureDays -> int32;
-        required property accountType -> str;
-        required property currentValue -> int32;
-    }
-
-    type Deposit extending FIBasic {
         required property type_ -> DepositAccType { # SAVINGS, CURRENT
             default := DepositAccType.SAVINGS;
         }
@@ -54,28 +73,19 @@ module default {
         required property status -> bool { # ACTIVE, INACTIVE
             default := true;
         }
-        required property od_acc -> bool { # is it an OD account or not
-            default := false;
-        }
         property pending_amt -> int32 { # in case of an OD account
             default := 0;
         }
         required property ifscCode -> str;
         required property micrCode -> str;
-        required property drawingLimit -> int32 {
-            default := 0;
-        }
-        required property currentBalance -> int32;
-        required property currentODLimit -> int32 {
-            default := 0;
-        }
-        required property balanceDateTime -> datetime;
+        multi link transactions -> TransactionLine;
     }
 
     type TermDeposit extending FDDeposit;
     type RecurringDeposit extending FDDeposit;
 
-    type CreditCard extending FIBasic {
+    type CreditCard {
+        required property maskedAccNumber -> str;
         required property dueDate -> datetime;
         required property cashLimit -> int32;
         required property currentDue -> int32;
@@ -86,8 +96,9 @@ module default {
         required property lastStatementDate -> datetime;
     }
 
-    # add insurance type too
-    type Insurance extending FIBasic {
+    type Insurance {
+        required property maskedAccNumber -> str;
+        required property coverType -> str;
         required property sumAssured -> int32;
         required property tenureYears -> int32;
         required property tenureMonths -> int32;
@@ -99,10 +110,31 @@ module default {
         required property trans_type -> TransactionType;
         required property txnId -> str;
         required property amount -> int32;
+        property text -> str;
         property narration -> str;
         property reference -> str;
         required property valueDate -> datetime;
         required property currentBalance -> int32;
         required property transactionTimestamp -> datetime;
+    }
+
+    type Ledger {
+        required link owner -> Company;
+        required link party -> Company;
+        property write_date -> datetime {
+            default := datetime_current();
+        }
+        index on (.owner);
+        index on (.party);
+        constraint exclusive on ( (.owner, .party) );
+    }
+    type LedgerEntry {
+        required property lid -> LedgerGlobalNo;
+        required property type_ -> TransactionType;
+        required property amt -> int32;
+        required property bal -> int32;
+        property write_date -> datetime {
+            default := datetime_current();
+        }
     }
 }
