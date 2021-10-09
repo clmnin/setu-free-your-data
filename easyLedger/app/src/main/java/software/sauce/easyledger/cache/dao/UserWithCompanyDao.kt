@@ -1,6 +1,7 @@
 package software.sauce.easyledger.cache.dao
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 import software.sauce.easyledger.cache.model.entities.UserCompanyCrossRef
 import software.sauce.easyledger.cache.model.entities.relation.UserWithCompanies
 
@@ -17,5 +18,5 @@ interface UserWithCompanyDao {
 
     @Transaction
     @Query("SELECT * FROM users WHERE uuid = :uuid")
-    suspend fun getUserWithCompanies(uuid: String): UserWithCompanies
+    fun getStreamUserWithCompanies(uuid: String): Flow<UserWithCompanies>
 }

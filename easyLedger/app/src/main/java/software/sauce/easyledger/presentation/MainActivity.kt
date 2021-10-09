@@ -66,7 +66,11 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(route = Screen.SelectCompany.route) { navBackStackEntry ->
-                        SelectCompanyScreen()
+                        viewModel.onLoad.value = false
+                        SelectCompanyScreen(
+                            onNavigation = navController::navigate,
+                            viewModel
+                        )
                     }
                     composable(route = Screen.Home.route) { navBackStackEntry ->
                         HomeScreen()

@@ -1,10 +1,12 @@
 package software.sauce.easyledger.presentation.ui.splash
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -19,6 +21,7 @@ import software.sauce.easyledger.cache.model.entities.AA.FiDeposit.DepositTransa
 import software.sauce.easyledger.cache.model.entities.CompanyEntity
 import software.sauce.easyledger.cache.model.entities.UserCompanyCrossRef
 import software.sauce.easyledger.cache.model.entities.UserEntity
+import software.sauce.easyledger.cache.model.entities.relation.UserWithCompanies
 import software.sauce.easyledger.cache.model.mapper.AAMapper
 import software.sauce.easyledger.interactors.app.Auth
 import software.sauce.easyledger.interactors.app.SyncCompanyAA
@@ -49,6 +52,9 @@ constructor(
     private var _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> get() = _isLoading
 
+    private var _userWithCompany: MutableStateFlow<List<CompanyEntity>> = MutableStateFlow(ArrayList())
+    val companies: StateFlow<List<CompanyEntity>> get() = _userWithCompany
+
     val onLoad: MutableState<Boolean> = mutableStateOf(false)
     val nextScreen: MutableState<Screen?> = mutableStateOf(null)
 
@@ -63,7 +69,7 @@ constructor(
             if (userProfile.isNullOrBlank().not()) {
                 val sessionUser = Gson().fromJson(userProfile, UserProfile::class.java)
                 if (sessionUser.companies.isEmpty().not()) {
-                    nextScreen.value = Screen.Home
+                    nextScreen.value = Screen.SelectCompany
                 } else {
                     nextScreen.value =  Screen.SignIn
                 }
@@ -72,6 +78,25 @@ constructor(
             }
         }
     }
+
+    fun getUserCompanies() {
+        viewModelScope.launch {
+            val userProfile = prefs?.userProfile
+            if (userProfile.isNullOrBlank().not()) {
+                val sessionUser = Gson().fromJson(userProfile, UserProfile::class.java)
+                val userCompaniesStream = userWithCompanyDao.getStreamUserWithCompanies(sessionUser.uuid)
+                try {
+                    userCompaniesStream.collectLatest {
+                        _userWithCompany.emit(it.companies)
+                    }
+                } catch (e: Exception) {
+                    FirebaseCrashlytics.getInstance().recordException(e)
+                }
+            }
+        }
+    }
+
+
 
     fun authenticateUserAndPopulateDB(phone: String, otp: String, callback: (String?, String?) -> Unit) {
         val authEventChannel = Channel<AsyncEvent<List<String>>>(Channel.BUFFERED)
