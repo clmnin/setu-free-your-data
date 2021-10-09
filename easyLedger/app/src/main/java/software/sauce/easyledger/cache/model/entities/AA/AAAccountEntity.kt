@@ -1,6 +1,7 @@
 package software.sauce.easyledger.cache.model.entities.AA
 
 import androidx.room.*
+import software.sauce.easyledger.cache.model.entities.AA.FiDeposit.FiDepositEntity
 
 @Entity(
     foreignKeys = [
@@ -11,12 +12,12 @@ import androidx.room.*
         ),
         ForeignKey(
             entity = FiTermEntity::class,
-            parentColumns = ["id"],
+            parentColumns = ["uuid"],
             childColumns = ["fi_term"],
         ),
         ForeignKey(
             entity = FiRecurringEntity::class,
-            parentColumns = ["id"],
+            parentColumns = ["uuid"],
             childColumns = ["fi_recurring"],
         ),
 //        ForeignKey(
@@ -32,8 +33,7 @@ import androidx.room.*
     ],
     indices = [
         Index(value = ["uuid"], unique = true),
-        Index(value = ["productUUID"]),
-        Index(value = ["transactionId"]),
+        Index(value = ["fi_deposit"]),
     ])
 data class AAAccountEntity(
     @PrimaryKey

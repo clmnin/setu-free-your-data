@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import software.sauce.easyledger.cache.model.mapper.AAMapper
 import software.sauce.easyledger.network.BackendService
 import software.sauce.easyledger.presentation.BaseApplication.Companion.prefs
 import software.sauce.easyledger.utils.Constants.Companion.BASE_URL
@@ -59,6 +60,12 @@ object NetworkModule {
     @Provides
     fun provideBackendService(): BackendService {
         return buildRetrofitClient().create(BackendService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideAAMapper(): AAMapper {
+        return AAMapper()
     }
 
 }

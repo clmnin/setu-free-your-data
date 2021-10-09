@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import software.sauce.easyledger.cache.dao.AADao
 import software.sauce.easyledger.cache.dao.CompanyDao
 import software.sauce.easyledger.cache.dao.UserDao
 import software.sauce.easyledger.cache.dao.UserWithCompanyDao
@@ -40,5 +41,11 @@ object CacheModule {
     @Provides
     fun provideUserWithCompanyDao(db: AppDatabase): UserWithCompanyDao {
         return db.userWithCompanyDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideAADao(db: AppDatabase): AADao {
+        return db.aADao()
     }
 }

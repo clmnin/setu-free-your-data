@@ -10,7 +10,7 @@ data class FiRecurringEntity(
     @ColumnInfo(name = "uuid")
     var uuid: String,
     var maskedAccNumber: String,
-    var ifsc: String,
+    var ifscCode: String,
     var branch: String,
     var tenureDays: Long,
     var accountType: String,

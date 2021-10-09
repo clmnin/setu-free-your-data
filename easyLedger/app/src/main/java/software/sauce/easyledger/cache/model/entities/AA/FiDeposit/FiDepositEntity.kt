@@ -1,4 +1,4 @@
-package software.sauce.easyledger.cache.model.entities.AA
+package software.sauce.easyledger.cache.model.entities.AA.FiDeposit
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

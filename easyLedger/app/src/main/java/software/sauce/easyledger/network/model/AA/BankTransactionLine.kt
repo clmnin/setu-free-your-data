@@ -14,7 +14,7 @@ data class BankTransactionLine (
     @SerializedName("text")
     var text: String?,
     @SerializedName("narration")
-    var narration: String,
+    var narration: String?,
     @SerializedName("reference")
     var reference: String,
     @SerializedName("valueDate")
