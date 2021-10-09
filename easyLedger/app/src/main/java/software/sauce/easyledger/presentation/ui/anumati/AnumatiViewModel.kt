@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import software.sauce.easyledger.interactors.anumati.FetchConsentUrl
 import software.sauce.easyledger.presentation.utils.ConnectivityManager
 import software.sauce.easyledger.presentation.utils.DialogQueue
-import software.sauce.easyledger.utils.ConstantUrls.Companion.TAG
+import software.sauce.easyledger.utils.Constants.Companion.TAG
 import javax.inject.Inject
 
 const val STATE_KEY_CONSENT = "consent.state.url.value"

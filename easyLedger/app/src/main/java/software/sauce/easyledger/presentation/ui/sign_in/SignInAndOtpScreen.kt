@@ -20,6 +20,8 @@ import software.sauce.easyledger.R
 import software.sauce.easyledger.presentation.components.MobileNumberInputCard
 import software.sauce.easyledger.presentation.navigation.Screen
 import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
+import software.sauce.easyledger.utils.Constants.Companion.acceptedOTP
+import software.sauce.easyledger.utils.Constants.Companion.acceptedPhones
 
 @Composable
 fun SignInAndOtp(
@@ -42,7 +44,7 @@ fun SignInAndOtp(
                     modifier = Modifier.weight(2f),
                     also_otp = true,
                     handleOnClick = { phone, otp ->
-                        if (phone == "9999999999" && otp == "123456") {
+                        if (acceptedPhones.contains(phone) && otp == acceptedOTP) {
                             onNavigateToRecipeDetailScreen(Screen.Home.route)
                         } else {
                             openDialog.value = true

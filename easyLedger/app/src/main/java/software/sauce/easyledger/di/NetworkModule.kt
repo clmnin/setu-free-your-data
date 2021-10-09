@@ -12,7 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import software.sauce.easyledger.network.BackendService
 import software.sauce.easyledger.presentation.BaseApplication.Companion.prefs
-import software.sauce.easyledger.utils.ConstantUrls.Companion.BASE_URL
+import software.sauce.easyledger.utils.Constants.Companion.BASE_URL
 import javax.inject.Singleton
 
 @Module

@@ -5,18 +5,25 @@ import android.content.SharedPreferences
 
 class Prefs (context: Context)
 {
+    companion object {
+        const val sharedPrefName = "ezLedgerPrefs"
+        const val jwtToken = "jwtToken"
+        const val profile = "myProfile"
 
-    private val preferences: SharedPreferences = context.getSharedPreferences(ConstantPref.sharedPrefName, Context.MODE_PRIVATE)
+        const val selectedCompany = "companyId"
+    }
+
+    private val preferences: SharedPreferences = context.getSharedPreferences(sharedPrefName, Context.MODE_PRIVATE)
 
     var token: String?
-        get() = preferences.getString(ConstantPref.jwtToken, "")
-        set(value) = preferences.edit().putString(ConstantPref.jwtToken, value).apply()
+        get() = preferences.getString(jwtToken, "")
+        set(value) = preferences.edit().putString(jwtToken, value).apply()
 
     var userProfile: String?
-        get() = preferences.getString(ConstantPref.profile, "")
-        set(value) = preferences.edit().putString(ConstantPref.profile, value).apply()
+        get() = preferences.getString(profile, "")
+        set(value) = preferences.edit().putString(profile, value).apply()
 
     var selectedCompanyUUID: String?
-        get() = preferences.getString(ConstantPref.selectedCompany, "")
-        set(value) = preferences.edit().putString(ConstantPref.selectedCompany, value).apply()
+        get() = preferences.getString(selectedCompany, "")
+        set(value) = preferences.edit().putString(selectedCompany, value).apply()
 }

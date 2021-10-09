@@ -1,7 +1,7 @@
 package software.sauce.easyledger.interactors.app
 
 import android.util.Log
-import software.sauce.easyledger.utils.ConstantUrls.Companion.TAG
+import software.sauce.easyledger.utils.Constants.Companion.TAG
 import java.io.IOException
 import java.net.InetSocketAddress
 import javax.net.SocketFactory
