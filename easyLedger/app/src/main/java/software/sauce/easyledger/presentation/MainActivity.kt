@@ -18,6 +18,7 @@ import software.sauce.easyledger.presentation.navigation.Screen
 import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
 import software.sauce.easyledger.presentation.ui.anumati.AnumatiViewModel
 import software.sauce.easyledger.presentation.ui.anumati.AnumatiWebView
+import software.sauce.easyledger.presentation.ui.home.CompanyViewModel
 import software.sauce.easyledger.presentation.ui.home.HomeScreen
 import software.sauce.easyledger.presentation.ui.select_company.SelectCompanyScreen
 import software.sauce.easyledger.presentation.ui.sign_in.SignInAndOtp
@@ -51,6 +52,7 @@ class MainActivity : ComponentActivity() {
             EasyLedgerTheme {
                 val navController = rememberNavController()
                 val viewModel: GlobalViewModel = viewModel()
+                val companyViewModel: CompanyViewModel = viewModel()
 
                 NavHost(navController = navController, startDestination = Screen.Splash.route) {
                     composable(route = Screen.Splash.route) { navBackStackEntry ->
@@ -79,6 +81,7 @@ class MainActivity : ComponentActivity() {
                         HomeScreen(
                             onNavigation = navController::navigate,
                             company_uuid = navBackStackEntry.arguments?.getString("company_uuid") ?: "",
+                            viewModel = companyViewModel
                         )
                     }
                     composable(

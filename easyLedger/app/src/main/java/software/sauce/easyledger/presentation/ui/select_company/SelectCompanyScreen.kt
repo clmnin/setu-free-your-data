@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import software.sauce.easyledger.R
+import software.sauce.easyledger.presentation.BaseApplication.Companion.prefs
 import software.sauce.easyledger.presentation.components.CompanyBasicCard
 import software.sauce.easyledger.presentation.components.NothingHere
 import software.sauce.easyledger.presentation.navigation.Screen
@@ -72,6 +73,7 @@ fun SelectCompanyScreen(
                                 CompanyBasicCard(
                                     company = company,
                                     onClick = {
+                                        prefs?.selectedCompanyUUID = company.uuid
                                         val route = Screen.Home.route + "/${company.uuid}"
                                         onNavigation(route)
                                     }

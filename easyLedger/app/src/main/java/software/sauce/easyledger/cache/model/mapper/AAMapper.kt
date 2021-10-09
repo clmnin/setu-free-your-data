@@ -1,5 +1,6 @@
 package software.sauce.easyledger.cache.model.mapper
 
+import software.sauce.easyledger.cache.converter.DateTimeConverters
 import software.sauce.easyledger.cache.model.entities.AA.AAAccountEntity
 import software.sauce.easyledger.cache.model.entities.AA.FiDeposit.BankTransactionLineEntity
 import software.sauce.easyledger.cache.model.entities.AA.FiDeposit.FiDepositEntity
@@ -74,7 +75,7 @@ class AAMapper {
                 reference = it.reference,
                 valueDate = it.valueDate,
                 currentBalance = it.currentBalance,
-                transactionTimestamp = it.transactionTimestamp
+                transactionTimestamp = DateTimeConverters.stringToDate(it.transactionTimestamp)
             )
         }
     }

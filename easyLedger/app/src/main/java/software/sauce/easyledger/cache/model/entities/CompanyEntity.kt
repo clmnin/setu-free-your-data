@@ -1,9 +1,6 @@
 package software.sauce.easyledger.cache.model.entities
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import software.sauce.easyledger.cache.model.entities.AA.AAAccountEntity
 
 @Entity(
@@ -14,6 +11,9 @@ import software.sauce.easyledger.cache.model.entities.AA.AAAccountEntity
             parentColumns = ["uuid"],
             childColumns = ["aa_uuid"],
         ),
+    ],
+    indices = [
+        Index(value = ["aa_uuid"], unique = true),
     ]
 )
 data class CompanyEntity(

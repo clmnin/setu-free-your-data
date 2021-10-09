@@ -20,6 +20,5 @@ data class UserWithCompanies(
             entityColumn = "company_uuid"
         )
     )
-
     val companies: List<CompanyEntity>
 )

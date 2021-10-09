@@ -94,8 +94,6 @@ constructor(
         }
     }
 
-
-
     fun authenticateUserAndPopulateDB(phone: String, otp: String, callback: (String?, String?) -> Unit) {
         val authEventChannel = Channel<AsyncEvent<List<String>>>(Channel.BUFFERED)
         val authEventsFlow = authEventChannel.receiveAsFlow()
