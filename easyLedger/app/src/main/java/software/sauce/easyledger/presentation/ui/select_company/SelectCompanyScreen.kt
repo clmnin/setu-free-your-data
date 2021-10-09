@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import software.sauce.easyledger.R
 import software.sauce.easyledger.presentation.components.CompanyBasicCard
 import software.sauce.easyledger.presentation.components.NothingHere
+import software.sauce.easyledger.presentation.theme.DeepBlue
 import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
 import software.sauce.easyledger.presentation.ui.splash.GlobalViewModel
 
@@ -35,7 +36,7 @@ fun SelectCompanyScreen(
         viewModel.getUserCompanies()
     }
     EasyLedgerTheme() {
-        Scaffold(backgroundColor = MaterialTheme.colors.primary) {
+        Scaffold(backgroundColor = DeepBlue) {
             Column(
                 Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -53,16 +54,20 @@ fun SelectCompanyScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 32.sp
                 )
-                Box(modifier = Modifier
-                    .background(color = MaterialTheme.colors.surface)
-                ) {
+                Column(modifier = Modifier.weight(3f)
+                    .background(color = DeepBlue)) {
+                    Text(
+                        text = "Businesses",
+                        style = MaterialTheme.typography.h1,
+                        modifier = Modifier.padding(15.dp)
+                    )
                     if (companies.isEmpty()) {
                         NothingHere()
                     } else {
                         LazyColumn {
                             itemsIndexed(
                                 items = companies
-                            ) { index, company ->
+                            ) { _, company ->
                                 CompanyBasicCard(
                                     company = company,
                                     onClick = {}

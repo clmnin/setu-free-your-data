@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import software.sauce.easyledger.R
+import software.sauce.easyledger.presentation.theme.DeepBlue
 import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
 
 @Composable
@@ -30,7 +31,7 @@ fun SplashScreen(
     val onLoad = viewModel.onLoad.value
 
     EasyLedgerTheme {
-        Scaffold(backgroundColor = MaterialTheme.colors.primary) {
+        Scaffold(backgroundColor = DeepBlue) {
             Column(
                 Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,

@@ -1,6 +1,5 @@
 package software.sauce.easyledger.presentation.ui.splash
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -21,7 +20,6 @@ import software.sauce.easyledger.cache.model.entities.AA.FiDeposit.DepositTransa
 import software.sauce.easyledger.cache.model.entities.CompanyEntity
 import software.sauce.easyledger.cache.model.entities.UserCompanyCrossRef
 import software.sauce.easyledger.cache.model.entities.UserEntity
-import software.sauce.easyledger.cache.model.entities.relation.UserWithCompanies
 import software.sauce.easyledger.cache.model.mapper.AAMapper
 import software.sauce.easyledger.interactors.app.Auth
 import software.sauce.easyledger.interactors.app.SyncCompanyAA
