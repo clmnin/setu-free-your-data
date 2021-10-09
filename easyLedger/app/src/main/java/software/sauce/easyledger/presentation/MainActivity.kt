@@ -20,6 +20,7 @@ import software.sauce.easyledger.presentation.ui.anumati.AnumatiViewModel
 import software.sauce.easyledger.presentation.ui.anumati.AnumatiWebView
 import software.sauce.easyledger.presentation.ui.home.HomeScreen
 import software.sauce.easyledger.presentation.ui.sign_in.SignInAndOtp
+import software.sauce.easyledger.presentation.ui.splash.SplashScreen
 import software.sauce.easyledger.presentation.utils.ConnectivityManager
 import software.sauce.easyledger.presentation.utils.GlobalViewModel
 import javax.inject.Inject
@@ -50,7 +51,13 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val viewModel: GlobalViewModel = viewModel()
 
-                NavHost(navController = navController, startDestination = Screen.SignIn.route) {
+                NavHost(navController = navController, startDestination = Screen.Splash.route) {
+                    composable(route = Screen.Splash.route) { navBackStackEntry ->
+                        SplashScreen(
+                            onNavigation = navController::navigate,
+                            viewModel
+                        )
+                    }
                     composable(route = Screen.SignIn.route) { navBackStackEntry ->
                         SignInAndOtp(
                             onNavigation = navController::navigate,

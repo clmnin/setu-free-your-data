@@ -3,6 +3,7 @@ package software.sauce.easyledger.presentation.navigation
 sealed class Screen(
     val route: String,
 ){
+    object Splash: Screen("splash")
     object SignIn: Screen("signIn")
     object Home: Screen("home")
     object ConsentMobileNumber: Screen("consentMobileNumber")
