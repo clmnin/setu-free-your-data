@@ -3,6 +3,8 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
+from app.middleware.schema import users
+
 
 class TokenPayload(BaseModel):
     """
@@ -25,3 +27,11 @@ class Token(BaseModel):
     """
     access_token: str
     token_type: str
+
+
+class BackendUserTokenResponse(BaseModel):
+    """
+    Token created at backend, to be used by client for all auth requests
+    """
+    token: Token
+    profile: Optional[users.UserProfile]

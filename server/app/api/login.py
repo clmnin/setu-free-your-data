@@ -14,11 +14,11 @@ from app.middleware.security import create_access_token
 router = APIRouter()
 
 
-@router.post("/login", response_model=authentication.Token)
+@router.post("/login", response_model=authentication.BackendUserTokenResponse)
 async def login_access_token(
     con: AsyncIOConnection = Depends(edb.get_con),
     form_data: OAuth2PasswordRequestForm = Depends(),
-) -> Any:
+) -> authentication.BackendUserTokenResponse:
     """
     Used only in development server. In production this route should have auth header
     """
@@ -38,6 +38,10 @@ async def login_access_token(
                 ),
                 token_type="bearer",
             )
-            return token
+            backend_user_token = authentication.BackendUserTokenResponse(
+                token=token,
+                profile=user_profile
+            )
+            return backend_user_token
         else:
             raise HTTPException(status_code=400, detail="User not found")
