@@ -64,7 +64,7 @@ constructor(
             }
 
             dataState.error?.let { error ->
-                Log.e(TAG, "getRecipe: ${error}")
+                Log.e(TAG, "anumati: ${error}")
                 dialogQueue.appendErrorMessage("An Error Occurred", error)
             }
         }.launchIn(viewModelScope)

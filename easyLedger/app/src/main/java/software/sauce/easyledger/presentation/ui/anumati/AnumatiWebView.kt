@@ -16,7 +16,7 @@ import software.sauce.easyledger.presentation.navigation.Screen
 
 @Composable
 fun AnumatiWebView(
-    onNavigateToRecipeDetailScreen: (String) -> Unit,
+    onNavigation: (String) -> Unit,
     phone: String,
     webViewModel: AnumatiViewModel
 ) {
@@ -55,7 +55,7 @@ fun AnumatiWebView(
                         ): Boolean {
                             // cancel the current request if the url is the redirect url
                             return if (request?.url.toString().contains("/redirect")) {
-                                onNavigateToRecipeDetailScreen(Screen.Home.route)
+                                onNavigation(Screen.Home.route)
                                 true
                             } else {
                                 false

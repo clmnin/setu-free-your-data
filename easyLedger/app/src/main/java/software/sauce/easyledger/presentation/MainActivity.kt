@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,6 +21,7 @@ import software.sauce.easyledger.presentation.ui.anumati.AnumatiWebView
 import software.sauce.easyledger.presentation.ui.home.HomeScreen
 import software.sauce.easyledger.presentation.ui.sign_in.SignInAndOtp
 import software.sauce.easyledger.presentation.utils.ConnectivityManager
+import software.sauce.easyledger.presentation.utils.GlobalViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -46,10 +48,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             EasyLedgerTheme {
                 val navController = rememberNavController()
+                val viewModel: GlobalViewModel = viewModel()
+
                 NavHost(navController = navController, startDestination = Screen.SignIn.route) {
                     composable(route = Screen.SignIn.route) { navBackStackEntry ->
                         SignInAndOtp(
-                            onNavigateToRecipeDetailScreen = navController::navigate,
+                            onNavigation = navController::navigate,
+                            viewModel
                         )
                     }
                     composable(route = Screen.Home.route) { navBackStackEntry ->
@@ -59,11 +64,11 @@ class MainActivity : ComponentActivity() {
                         route = Screen.Anumati.route + "/{phone}",
                         arguments = listOf(navArgument("phone") { type = NavType.StringType }),
                     ) { navBackStackEntry ->
-                        val viewModel: AnumatiViewModel by viewModels()
+                        val anumatiViewModel: AnumatiViewModel by viewModels()
                         AnumatiWebView(
-                            onNavigateToRecipeDetailScreen = navController::navigate,
+                            onNavigation = navController::navigate,
                             phone = navBackStackEntry.arguments?.getString("phone") ?: "",
-                            webViewModel=viewModel
+                            webViewModel=anumatiViewModel
                         )
                     }
                 }

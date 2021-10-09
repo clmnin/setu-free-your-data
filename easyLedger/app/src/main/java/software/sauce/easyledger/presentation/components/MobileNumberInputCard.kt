@@ -17,6 +17,7 @@ fun MobileNumberInputCard(
     modifier: Modifier,
     also_otp: Boolean = false,
     button_text: String = "Send OTP",
+    is_loading: Boolean = false,
     handleOnClick: (String, String) -> Unit,
 ) {
     var mobileNumber by remember {
@@ -50,7 +51,7 @@ fun MobileNumberInputCard(
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = mobileNumber,
-                    enabled = otpTextFieldEnabled.not(),
+                    enabled = otpTextFieldEnabled.not() && is_loading.not(),
                     onValueChange = { mobileNumber = it },
                     label = { Text(text = "Mobile Number") },
                     singleLine = true,
@@ -67,6 +68,7 @@ fun MobileNumberInputCard(
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
                         value = otpNumber,
+                        enabled = is_loading.not(),
                         onValueChange = { otpNumber = it },
                         label = { Text(text = "OTP") },
                         singleLine = true,
@@ -93,11 +95,11 @@ fun MobileNumberInputCard(
                             handleOnClick(mobileNumber, otpNumber)
                         }
                     },
-                    enabled = isFormValid,
+                    enabled = isFormValid && is_loading.not(),
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text(text = buttonText)
+                    Text(text = if (is_loading) "Loading..." else buttonText)
                 }
                 Spacer(modifier = Modifier.weight(1f))
             }
