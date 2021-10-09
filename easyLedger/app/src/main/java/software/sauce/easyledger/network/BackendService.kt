@@ -1,7 +1,7 @@
 package software.sauce.easyledger.network
 
 import retrofit2.http.*
-import software.sauce.easyledger.network.model.CompanyWithAA
+import software.sauce.easyledger.network.model.AA.CompanyWithAA
 import software.sauce.easyledger.network.model.UserProfileToken
 
 interface BackendService {
