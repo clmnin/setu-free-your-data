@@ -4,6 +4,9 @@ from uuid import UUID
 import json
 from edgedb import AsyncIOConnection, NoDataError
 from fastapi import HTTPException
+from pydantic import parse_raw_as
+
+from app.middleware.schema.company import CompanyWithAA
 
 
 async def create(
@@ -32,6 +35,86 @@ async def create(
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"{e}")
     return json.loads(result)
+
+
+async def get_with_aa(
+    con: AsyncIOConnection, *, company_id: UUID
+) -> Optional[CompanyWithAA]:
+    try:
+        async for tx in con.retrying_transaction():
+            async with tx:
+                result = await tx.query_single_json(
+                    """
+                    SELECT Company {
+                        id,
+                        name,
+                        display_name,
+                        aa : {
+                            id,
+                            phone,
+                            name,
+                            email,
+                            dob,
+                            pan,
+                            fi_deposit : {
+                                id,
+                                maskedAccNumber,
+                                type_,
+                                branch,
+                                status,
+                                pending_amt,
+                                ifscCode,
+                                micrCode
+                            },
+                            fi_term : {
+                                id,
+                                maskedAccNumber,
+                                ifsc,
+                                branch,
+                                tenureDays,
+                                accountType,
+                                currentValue
+                            },
+                            fi_recurring : {
+                                id,
+                                maskedAccNumber,
+                                ifsc,
+                                branch,
+                                tenureDays,
+                                accountType,
+                                currentValue
+                            },
+                            fi_credit_card : {
+                                id,
+                                maskedAccNumber,
+                                dueDate,
+                                cashLimit,
+                                currentDue,
+                                creditLimit,
+                                totalDueAmount,
+                                availableCredit,
+                                previousDueAmount,
+                                lastStatementDate
+                            },
+                            fi_insurance : {
+                                id,
+                                maskedAccNumber,
+                                coverType,
+                                sumAssured,
+                                tenureYears,
+                                tenureMonths,
+                                policyEndDate
+                            },
+                        }
+                    } FILTER .id = <uuid>$company_id
+                    """,
+                    company_id=company_id
+                )
+    except NoDataError:
+        return None
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"{e}")
+    return parse_raw_as(CompanyWithAA, result)
 
 
 async def link_aa(

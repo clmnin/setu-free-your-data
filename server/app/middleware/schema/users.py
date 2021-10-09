@@ -3,14 +3,10 @@ from typing import List
 from pydantic import BaseModel
 from uuid import UUID
 
-
-class NestedCompanyForUserProfile(BaseModel):
-    id: UUID
-    name: str
-    display_name: str
+from app.middleware.schema.company import CompanyBase
 
 
 class UserProfile(BaseModel):
     id: UUID
     phone: str
-    company: List[NestedCompanyForUserProfile]
+    company: List[CompanyBase]
