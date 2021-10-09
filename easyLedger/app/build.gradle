@@ -73,7 +73,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics:18.2.3'
 
-
     implementation AndroidX.core_ktx
     implementation AndroidX.app_compat
     implementation AndroidX.constraint_layout

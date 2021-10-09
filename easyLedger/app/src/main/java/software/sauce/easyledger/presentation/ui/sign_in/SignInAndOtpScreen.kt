@@ -17,27 +17,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import software.sauce.easyledger.R
+import software.sauce.easyledger.presentation.components.MobileNumberInputCard
 import software.sauce.easyledger.presentation.navigation.Screen
 import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
 
 @Composable
 fun SignInAndOtp(
     onNavigateToRecipeDetailScreen: (String) -> Unit,
-    textFieldText: String = "Mobile Number",
-    textFieldLength: Int = 10,
-    buttonText: String = "Send OTP",
-    nextScreen: (String) -> String?,
 ) {
-    var mobileNumber by remember {
-        mutableStateOf("")
-    }
-    val isFormValid by derivedStateOf {
-        mobileNumber.isNotBlank() && mobileNumber.length == textFieldLength
-    }
-
     val openDialog = remember { mutableStateOf(false) }
 
-    EasyLedgerTheme() {
+    EasyLedgerTheme {
         Scaffold(backgroundColor = MaterialTheme.colors.primary) {
             Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
                 Image(
@@ -48,53 +38,17 @@ fun SignInAndOtp(
                         .size(200.dp)
                 )
                 Text(text = stringResource(id = R.string.app_name), fontWeight = FontWeight.Bold, fontSize = 32.sp)
-                Card(
-                    Modifier
-                        .weight(2f)
-                        .padding(8.dp),
-                    shape = RoundedCornerShape(32.dp)
-                ) {
-                    Column(
-                        Modifier
-                            .fillMaxSize()
-                            .padding(32.dp)
-                    ) {
-                        Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                            OutlinedTextField(
-                                modifier = Modifier.fillMaxWidth(),
-                                value = mobileNumber,
-                                onValueChange = { mobileNumber = it },
-                                label = { Text(text = textFieldText) },
-                                singleLine = true,
-                                trailingIcon = {
-                                    if (mobileNumber.isNotBlank())
-                                        IconButton(onClick = { mobileNumber = "" }) {
-                                            Icon(imageVector = Icons.Filled.Clear, contentDescription = "")
-                                        }
-                                },
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Button(
-                                onClick = {
-                                    // TODO: Add dialog asking for confirmation (send OTP, cancel)
-                                    val route = nextScreen(mobileNumber)
-                                    if (route == null) {
-                                        openDialog.value = true
-                                    } else {
-                                        onNavigateToRecipeDetailScreen(route)
-                                    }
-                                },
-                                enabled = isFormValid,
-                                modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(16.dp)
-                            ) {
-                                Text(text = buttonText)
-                            }
-                            Spacer(modifier = Modifier.weight(1f))
+                MobileNumberInputCard(
+                    modifier = Modifier.weight(2f),
+                    also_otp = true,
+                    handleOnClick = { phone, otp ->
+                        if (phone == "9999999999" && otp == "123456") {
+                            onNavigateToRecipeDetailScreen(Screen.Home.route)
+                        } else {
+                            openDialog.value = true
                         }
                     }
-                }
+                )
                 if (openDialog.value) {
                     AlertDialog(
                         onDismissRequest = {

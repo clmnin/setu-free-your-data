@@ -50,31 +50,6 @@ class MainActivity : ComponentActivity() {
                     composable(route = Screen.SignIn.route) { navBackStackEntry ->
                         SignInAndOtp(
                             onNavigateToRecipeDetailScreen = navController::navigate,
-                            nextScreen = { path ->
-                                if (path != "9999999999") {
-                                    null
-                                } else {
-                                    Screen.ValidateOTP.route + "/$path"
-                                }
-                            }
-                        )
-                    }
-                    composable(
-                        route = Screen.ValidateOTP.route + "/{phone}",
-                        arguments = listOf(navArgument("phone") { type = NavType.StringType }),
-                    ) { navBackStackEntry ->
-                        SignInAndOtp(
-                            onNavigateToRecipeDetailScreen = navController::navigate,
-                            textFieldText = "Enter OTP send to ${navBackStackEntry.arguments?.getString("phone") ?: ""}",
-                            buttonText = "Submit OTP",
-                            textFieldLength = 6,
-                            nextScreen = { otp ->
-                                if (otp != "123456") {
-                                    null
-                                } else {
-                                    Screen.Home.route
-                                }
-                            }
                         )
                     }
                     composable(route = Screen.Home.route) { navBackStackEntry ->
