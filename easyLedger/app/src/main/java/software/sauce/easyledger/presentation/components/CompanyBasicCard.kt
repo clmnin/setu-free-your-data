@@ -1,10 +1,11 @@
 package software.sauce.easyledger.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,19 +23,23 @@ fun CompanyBasicCard(
     onClick: () -> Unit,
     color: Color = LightRed
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .padding(15.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .background(color)
-            .padding(horizontal = 15.dp, vertical = 20.dp)
-            .fillMaxWidth()
+    Box(
+        modifier = Modifier.clickable(onClick = onClick)
     ) {
-        Text(
-            text = company.display_name,
-            style = MaterialTheme.typography.h2
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .padding(15.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(color)
+                .padding(horizontal = 15.dp, vertical = 20.dp)
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = company.display_name,
+                style = MaterialTheme.typography.h2
+            )
+        }
     }
 }

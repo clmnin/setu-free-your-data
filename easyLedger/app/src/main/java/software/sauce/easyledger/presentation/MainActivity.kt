@@ -72,8 +72,14 @@ class MainActivity : ComponentActivity() {
                             viewModel
                         )
                     }
-                    composable(route = Screen.Home.route) { navBackStackEntry ->
-                        HomeScreen()
+                    composable(
+                        route = Screen.Home.route + "/{company_uuid}",
+                        arguments = listOf(navArgument("company_uuid") { type = NavType.StringType }),
+                    ) { navBackStackEntry ->
+                        HomeScreen(
+                            onNavigation = navController::navigate,
+                            company_uuid = navBackStackEntry.arguments?.getString("company_uuid") ?: "",
+                        )
                     }
                     composable(
                         route = Screen.Anumati.route + "/{phone}",

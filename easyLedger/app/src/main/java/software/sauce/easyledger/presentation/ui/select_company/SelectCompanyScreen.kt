@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import software.sauce.easyledger.R
 import software.sauce.easyledger.presentation.components.CompanyBasicCard
 import software.sauce.easyledger.presentation.components.NothingHere
+import software.sauce.easyledger.presentation.navigation.Screen
 import software.sauce.easyledger.presentation.theme.DeepBlue
 import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
 import software.sauce.easyledger.presentation.ui.splash.GlobalViewModel
@@ -70,7 +71,10 @@ fun SelectCompanyScreen(
                             ) { _, company ->
                                 CompanyBasicCard(
                                     company = company,
-                                    onClick = {}
+                                    onClick = {
+                                        val route = Screen.Home.route + "/${company.uuid}"
+                                        onNavigation(route)
+                                    }
                                 )
                             }
                         }

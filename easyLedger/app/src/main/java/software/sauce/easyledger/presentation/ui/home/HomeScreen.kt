@@ -8,7 +8,10 @@ import software.sauce.easyledger.presentation.theme.DeepBlue
 import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onNavigation: (String) -> Unit,
+    company_uuid: String
+) {
     EasyLedgerTheme()
     {
         Scaffold(backgroundColor = DeepBlue) {
