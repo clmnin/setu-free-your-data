@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import software.sauce.easyledger.cache.model.entities.AA.AAAccountEntity
 import software.sauce.easyledger.cache.model.entities.CompanyEntity
+import software.sauce.easyledger.cache.model.entities.LedgerEntity
 
 data class CompanyWithAA (
     @Embedded
@@ -13,5 +14,12 @@ data class CompanyWithAA (
         parentColumn = "aa_uuid",
         entityColumn = "uuid"
     )
-    val aa: AAWithFi?
+    val aa: AAWithFi?,
+
+    @Relation(
+        entity = LedgerEntity::class,
+        parentColumn = "uuid",
+        entityColumn = "owner"
+    )
+    val ledger: List<LedgerEntity>?
 )

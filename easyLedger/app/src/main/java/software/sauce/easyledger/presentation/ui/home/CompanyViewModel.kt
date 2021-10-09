@@ -55,13 +55,14 @@ constructor(
             if (companyUUID != null) {
                 val companyAAStream = companyDao.getStreamAA(companyUUID)
                 try {
-                    companyAAStream.collectLatest {
-                        it.aa?.deposit?.transactions?.let { t -> _companyBankTransactions.emit(t) }
-                        val totalCredit = it.aa?.deposit?.transactions?.map { if (it.transaType == "CREDIT") it.amount else 0 }?.sum()
-                        val totalDebit = it.aa?.deposit?.transactions?.map { if (it.transaType == "DEBIT") it.amount else 0 }?.sum()
-                        val totalFT = it.aa?.deposit?.transactions?.map { if (it.mode == "FT") it.amount else 0 }?.sum()
-                        val totalUPI = it.aa?.deposit?.transactions?.map { if (it.mode == "UPI") it.amount else 0 }?.sum()
-                        val totalOTHER = it.aa?.deposit?.transactions?.map { if (it.mode == "OTHER") it.amount else 0 }?.sum()
+                    companyAAStream.collectLatest { companyWithAAandLedger ->
+                        // sort bank transaction
+                        val bankTransaction = companyWithAAandLedger.aa?.deposit?.transactions?.sortedByDescending { it.transactionTimestamp }
+                        val totalCredit = bankTransaction?.map { if (it.transaType == "CREDIT") it.amount else 0 }?.sum()
+                        val totalDebit = bankTransaction?.map { if (it.transaType == "DEBIT") it.amount else 0 }?.sum()
+                        val totalFT = bankTransaction?.map { if (it.mode == "FT") it.amount else 0 }?.sum()
+                        val totalUPI = bankTransaction?.map { if (it.mode == "UPI") it.amount else 0 }?.sum()
+                        val totalOTHER = bankTransaction?.map { if (it.mode == "OTHER") it.amount else 0 }?.sum()
                     }
                 } catch (e: Exception) {
                     FirebaseCrashlytics.getInstance().recordException(e)

@@ -2,6 +2,11 @@ package software.sauce.easyledger.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
+val colorPrimary = Color(0xFF1BA57B)
+val Gray = Color(0xFF4B4F5A)
+val DarkGray = Color(0xFF54555A)
+val LightGray = Color(0xFF696969)
+val GhostWhite = Color(0xFFF8F8F8)
 val Purple200 = Color(0xFFBB86FC)
 val Purple500 = Color(0xFF6200EE)
 val Purple700 = Color(0xFF3700B3)
@@ -21,6 +26,8 @@ val Beige3 = Color(0xfff9a27b)
 val LightGreen1 = Color(0xff54e1b6)
 val LightGreen2 = Color(0xff36ddab)
 val LightGreen3 = Color(0xff11d79b)
+val CurrencyGreen = Color(0xff63a349)
+val CurrencyRed = Color(0xffe04b43)
 val BlueViolet1 = Color(0xffaeb4fd)
 val BlueViolet2 = Color(0xff9fa5fe)
 val BlueViolet3 = Color(0xff8f98fd)

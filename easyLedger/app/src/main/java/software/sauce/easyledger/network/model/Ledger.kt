@@ -1,9 +1,6 @@
 package software.sauce.easyledger.network.model
 
-import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import java.util.*
 
 data class Ledger(
     @SerializedName("id")

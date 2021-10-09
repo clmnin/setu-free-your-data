@@ -20,5 +20,5 @@ data class FiDepositWithTransactions(
             entityColumn = "bank_trans_uuid"
         )
     )
-    val transactions: List<BankTransactionLineEntity>
+    var transactions: List<BankTransactionLineEntity>
 )
