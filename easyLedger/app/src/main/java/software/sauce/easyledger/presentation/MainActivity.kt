@@ -20,9 +20,9 @@ import software.sauce.easyledger.presentation.ui.anumati.AnumatiViewModel
 import software.sauce.easyledger.presentation.ui.anumati.AnumatiWebView
 import software.sauce.easyledger.presentation.ui.home.HomeScreen
 import software.sauce.easyledger.presentation.ui.sign_in.SignInAndOtp
+import software.sauce.easyledger.presentation.ui.splash.GlobalViewModel
 import software.sauce.easyledger.presentation.ui.splash.SplashScreen
 import software.sauce.easyledger.presentation.utils.ConnectivityManager
-import software.sauce.easyledger.presentation.ui.splash.GlobalViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
