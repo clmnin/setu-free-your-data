@@ -81,7 +81,7 @@ constructor(
         val syncAAEventsFlow = syncAAEventChannel.receiveAsFlow()
 
         val syncBankEventChannel = Channel<AsyncEvent<Boolean>>(Channel.BUFFERED)
-        val syncBankEventsFlow = syncAAEventChannel.receiveAsFlow()
+        val syncBankEventsFlow = syncBankEventChannel.receiveAsFlow()
         authEventsFlow.onEach {
             when(it) {
                 is AsyncEvent.Success -> {

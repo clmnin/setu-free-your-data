@@ -19,6 +19,7 @@ import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
 import software.sauce.easyledger.presentation.ui.anumati.AnumatiViewModel
 import software.sauce.easyledger.presentation.ui.anumati.AnumatiWebView
 import software.sauce.easyledger.presentation.ui.home.HomeScreen
+import software.sauce.easyledger.presentation.ui.select_company.SelectCompanyScreen
 import software.sauce.easyledger.presentation.ui.sign_in.SignInAndOtp
 import software.sauce.easyledger.presentation.ui.splash.GlobalViewModel
 import software.sauce.easyledger.presentation.ui.splash.SplashScreen
@@ -63,6 +64,9 @@ class MainActivity : ComponentActivity() {
                             onNavigation = navController::navigate,
                             viewModel
                         )
+                    }
+                    composable(route = Screen.SelectCompany.route) { navBackStackEntry ->
+                        SelectCompanyScreen()
                     }
                     composable(route = Screen.Home.route) { navBackStackEntry ->
                         HomeScreen()

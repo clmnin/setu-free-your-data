@@ -73,7 +73,7 @@ fun SignInAndOtp(
                                     ).show()
                                 } else {
                                     // if no error that means we are ready to go to the next screen
-                                    onNavigation(Screen.Home.route)
+                                    onNavigation(Screen.SelectCompany.route)
                                 }
                             }
                         } else {
