@@ -1,6 +1,5 @@
 package software.sauce.easyledger.presentation.ui.splash
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -8,11 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import software.sauce.easyledger.cache.dao.CompanyDao
 import software.sauce.easyledger.cache.dao.UserDao
@@ -24,8 +21,8 @@ import software.sauce.easyledger.interactors.app.Auth
 import software.sauce.easyledger.network.model.UserProfile
 import software.sauce.easyledger.presentation.BaseApplication.Companion.prefs
 import software.sauce.easyledger.presentation.navigation.Screen
+import software.sauce.easyledger.presentation.utils.AsyncEvent
 import software.sauce.easyledger.presentation.utils.ConnectivityManager
-import software.sauce.easyledger.utils.Constants
 import javax.inject.Inject
 
 @HiltViewModel
@@ -67,12 +64,31 @@ constructor(
         }
     }
 
-    fun authUser(phone: String, otp: String) {
+    fun authenticateUserAndPopulateDB(phone: String, otp: String, callback: (String?, String?) -> Unit) {
+        val eventChannel = Channel<AsyncEvent<List<String>>>(Channel.BUFFERED)
+        val eventsFlow = eventChannel.receiveAsFlow()
+        eventsFlow.onEach {
+            when(it) {
+                is AsyncEvent.Success -> {
+                    getCompanyLinkedData(it.value)
+                }
+                is AsyncEvent.Error -> {
+                    callback(null, "Failed to login. Please check your OTP.")
+                }
+            }
+        }.launchIn(viewModelScope)
+        authUser(phone, otp, eventChannel)
+    }
+
+    private fun getCompanyLinkedData(companies: List<String>) {
+
+    }
+
+    private fun authUser(phone: String, otp: String, channel: Channel<AsyncEvent<List<String>>>) {
         auth.execute(phone, otp, connectivityManager.isNetworkAvailable.value).onEach { dataState ->
             _isLoading.emit(dataState.loading)
 
             dataState.data?.let { data ->
-                Log.e(Constants.TAG, "global vm auth: $data")
                 prefs?.token = data.token.token
                 prefs?.userProfile = Gson().toJson(data.userProfile)
                 // insert the user and the companies associated with the user
@@ -87,11 +103,11 @@ constructor(
                     val userWithCompaniesCrossRef: List<UserCompanyCrossRef> = companies.map{UserCompanyCrossRef(userUUID, it.uuid)}
                     userWithCompanyDao.insert(userWithCompaniesCrossRef)
                 }
-
+                channel.send(AsyncEvent.Success(data.userProfile.companies.map { it.uuid }))
             }
 
             dataState.error?.let { error ->
-                Log.e(Constants.TAG, "global vm auth: $error")
+                channel.send(AsyncEvent.Error(error))
             }
         }.launchIn(viewModelScope)
     }

@@ -8,10 +8,12 @@ data class DataState<out T>(
     companion object{
 
         fun <T> success(
-            data: T
+            data: T,
+            loading: Boolean = false
         ): DataState<T>{
             return DataState(
                 data = data,
+                loading = loading
             )
         }
 

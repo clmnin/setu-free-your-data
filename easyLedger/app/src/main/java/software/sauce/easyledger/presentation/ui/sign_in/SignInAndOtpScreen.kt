@@ -1,5 +1,6 @@
 package software.sauce.easyledger.presentation.ui.sign_in
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -19,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import software.sauce.easyledger.R
 import software.sauce.easyledger.presentation.components.MobileNumberInputCard
+import software.sauce.easyledger.presentation.navigation.Screen
 import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
 import software.sauce.easyledger.presentation.ui.splash.GlobalViewModel
 import software.sauce.easyledger.utils.Constants.Companion.acceptedOTP
@@ -27,11 +30,13 @@ import software.sauce.easyledger.utils.Constants.Companion.acceptedPhones
 @Composable
 fun SignInAndOtp(
     onNavigation: (String) -> Unit,
-    vieModel: GlobalViewModel
+    viewModel: GlobalViewModel
 ) {
+    val context = LocalContext.current
+
     val openDialog = remember { mutableStateOf(false) }
 
-    val isLoading = vieModel.isLoading.collectAsState().value
+    val isLoading = viewModel.isLoading.collectAsState().value
 
     EasyLedgerTheme {
         Scaffold(backgroundColor = MaterialTheme.colors.primary) {
@@ -58,7 +63,19 @@ fun SignInAndOtp(
                     is_loading = isLoading,
                     handleOnClick = { phone, otp ->
                         if (acceptedPhones.contains(phone) && otp == acceptedOTP) {
-                            vieModel.authUser(phone, otp)
+                            viewModel.authenticateUserAndPopulateDB(phone, otp) {
+                                _, error ->
+                                if (error != null) {
+                                    Toast.makeText(
+                                        context,
+                                        error,
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                } else {
+                                    // if no error that means we are ready to go to the next screen
+                                    onNavigation(Screen.Home.route)
+                                }
+                            }
                         } else {
                             openDialog.value = true
                         }

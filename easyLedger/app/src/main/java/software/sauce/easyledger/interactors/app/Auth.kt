@@ -18,7 +18,9 @@ class Auth(
             emit(DataState.loading())
             if(isNetworkAvailable){
                 val authToken = authUserWithBackend(phone, otp)
-                emit(DataState.success(authToken))
+                // set loading to true as we have to get company data after auth.
+                // so it should stay in the loading state
+                emit(DataState.success(authToken, true))
             } else {
                 throw Exception("No Internet")
             }
