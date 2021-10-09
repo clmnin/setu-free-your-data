@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import software.sauce.easyledger.R
 import software.sauce.easyledger.presentation.components.MobileNumberInputCard
 import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
-import software.sauce.easyledger.presentation.utils.GlobalViewModel
+import software.sauce.easyledger.presentation.ui.splash.GlobalViewModel
 import software.sauce.easyledger.utils.Constants.Companion.acceptedOTP
 import software.sauce.easyledger.utils.Constants.Companion.acceptedPhones
 

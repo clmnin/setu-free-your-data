@@ -1,4 +1,4 @@
-package software.sauce.easyledger.presentation.utils
+package software.sauce.easyledger.presentation.ui.splash
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
@@ -14,10 +14,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import software.sauce.easyledger.cache.dao.CompanyDao
+import software.sauce.easyledger.cache.dao.UserDao
+import software.sauce.easyledger.cache.dao.UserWithCompanyDao
+import software.sauce.easyledger.cache.model.entities.CompanyEntity
+import software.sauce.easyledger.cache.model.entities.UserCompanyCrossRef
+import software.sauce.easyledger.cache.model.entities.UserEntity
 import software.sauce.easyledger.interactors.app.Auth
 import software.sauce.easyledger.network.model.UserProfile
 import software.sauce.easyledger.presentation.BaseApplication.Companion.prefs
 import software.sauce.easyledger.presentation.navigation.Screen
+import software.sauce.easyledger.presentation.utils.ConnectivityManager
 import software.sauce.easyledger.utils.Constants
 import javax.inject.Inject
 
@@ -26,6 +33,9 @@ class GlobalViewModel
 @Inject
 constructor(
     private val auth: Auth,
+    private val userDao: UserDao,
+    private val companyDao: CompanyDao,
+    private val userWithCompanyDao: UserWithCompanyDao,
     private val connectivityManager: ConnectivityManager,
     private val state: SavedStateHandle,
 ): ViewModel(){
@@ -65,9 +75,19 @@ constructor(
                 Log.e(Constants.TAG, "global vm auth: $data")
                 prefs?.token = data.token.token
                 prefs?.userProfile = Gson().toJson(data.userProfile)
+                // insert the user and the companies associated with the user
+                val userUUID = data.userProfile.uuid
+                userDao.insertUser(UserEntity(uuid=userUUID, phone=data.userProfile.phone))
                 if (data.userProfile.companies.isNullOrEmpty().not()) {
                     prefs?.selectedCompanyUUID = data.userProfile.companies[0].uuid
+                    val companies = data.userProfile.companies.map {
+                        CompanyEntity(it.uuid, it.name, it.displayName)
+                    }
+                    companyDao.insertCompany(companies)
+                    val userWithCompaniesCrossRef: List<UserCompanyCrossRef> = companies.map{UserCompanyCrossRef(userUUID, it.uuid)}
+                    userWithCompanyDao.insert(userWithCompaniesCrossRef)
                 }
+
             }
 
             dataState.error?.let { error ->

@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import software.sauce.easyledger.R
 import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
-import software.sauce.easyledger.presentation.utils.GlobalViewModel
 
 @Composable
 fun SplashScreen(

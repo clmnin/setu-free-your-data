@@ -58,7 +58,6 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideBackendService(): BackendService {
-
         return buildRetrofitClient().create(BackendService::class.java)
     }
 
