@@ -1,5 +1,6 @@
 package software.sauce.easyledger.presentation.ui.splash
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -18,6 +19,7 @@ import software.sauce.easyledger.cache.model.entities.CompanyEntity
 import software.sauce.easyledger.cache.model.entities.UserCompanyCrossRef
 import software.sauce.easyledger.cache.model.entities.UserEntity
 import software.sauce.easyledger.interactors.app.Auth
+import software.sauce.easyledger.interactors.app.SyncCompany
 import software.sauce.easyledger.network.model.UserProfile
 import software.sauce.easyledger.presentation.BaseApplication.Companion.prefs
 import software.sauce.easyledger.presentation.navigation.Screen
@@ -30,6 +32,7 @@ class GlobalViewModel
 @Inject
 constructor(
     private val auth: Auth,
+    private val syncCompany: SyncCompany,
     private val userDao: UserDao,
     private val companyDao: CompanyDao,
     private val userWithCompanyDao: UserWithCompanyDao,
@@ -65,23 +68,47 @@ constructor(
     }
 
     fun authenticateUserAndPopulateDB(phone: String, otp: String, callback: (String?, String?) -> Unit) {
-        val eventChannel = Channel<AsyncEvent<List<String>>>(Channel.BUFFERED)
-        val eventsFlow = eventChannel.receiveAsFlow()
-        eventsFlow.onEach {
+        val authEventChannel = Channel<AsyncEvent<List<String>>>(Channel.BUFFERED)
+        val authEventsFlow = authEventChannel.receiveAsFlow()
+
+        val syncEventChannel = Channel<AsyncEvent<Boolean>>(Channel.BUFFERED)
+        val syncEventsFlow = syncEventChannel.receiveAsFlow()
+        authEventsFlow.onEach {
             when(it) {
                 is AsyncEvent.Success -> {
-                    getCompanyLinkedData(it.value)
+                    getCompanyLinkedData(it.value, syncEventChannel)
                 }
                 is AsyncEvent.Error -> {
                     callback(null, "Failed to login. Please check your OTP.")
                 }
             }
         }.launchIn(viewModelScope)
-        authUser(phone, otp, eventChannel)
+        syncEventsFlow.onEach {
+            when(it) {
+                is AsyncEvent.Success -> {
+                    callback(null, null)
+                }
+                is AsyncEvent.Error -> {
+                    callback(null, "Failed to sync data.")
+                }
+            }
+        }.launchIn(viewModelScope)
+        authUser(phone, otp, authEventChannel)
     }
 
-    private fun getCompanyLinkedData(companies: List<String>) {
+    private fun getCompanyLinkedData(companies: List<String>, channel: Channel<AsyncEvent<Boolean>>) {
+        syncCompany.execute(companies, connectivityManager.isNetworkAvailable.value).onEach { dataState ->
+            _isLoading.emit(dataState.loading)
 
+            dataState.data?.let { data ->
+                Log.e("Company AA", "$data")
+                channel.send(AsyncEvent.Success(true))
+            }
+
+            dataState.error?.let { error ->
+                channel.send(AsyncEvent.Error(error))
+            }
+        }.launchIn(viewModelScope)
     }
 
     private fun authUser(phone: String, otp: String, channel: Channel<AsyncEvent<List<String>>>) {
