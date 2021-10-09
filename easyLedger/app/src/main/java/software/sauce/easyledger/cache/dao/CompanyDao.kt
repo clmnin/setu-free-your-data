@@ -2,7 +2,9 @@ package software.sauce.easyledger.cache.dao
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import software.sauce.easyledger.cache.model.entities.AA.FiDeposit.BankTransactionLineEntity
 import software.sauce.easyledger.cache.model.entities.CompanyEntity
+import software.sauce.easyledger.cache.model.entities.LedgerEntity
 import software.sauce.easyledger.cache.model.entities.relation.CompanyWithAA
 
 @Dao
@@ -25,5 +27,8 @@ interface CompanyDao {
     @Transaction
     @Query("SELECT * FROM companies WHERE uuid = :uuid")
     fun getStreamAA(uuid: String): Flow<CompanyWithAA>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertLedger(ledgers: List<LedgerEntity>): LongArray
 
 }

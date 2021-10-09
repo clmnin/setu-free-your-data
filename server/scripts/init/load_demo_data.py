@@ -483,6 +483,145 @@ async def create_aas(con: AsyncIOConnection) -> None:
             """)
 
 
+async def init_ledger_res_1(con: AsyncIOConnection) -> None:
+    async for tx in con.retrying_transaction():
+        async with tx:
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler1" ), type_ := TransactionType.CREDIT, amt := 50000, bal := -50000,  write_date := to_datetime('2021-09-13T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler1" ), type_ := TransactionType.DEBIT , amt := 50000, bal := -50000,  write_date := to_datetime('2021-09-20T13:09:17+05:30'), narration := "IOU"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler1" ), type_ := TransactionType.CREDIT, amt := 50000, bal := -50000,  write_date := to_datetime('2021-09-20T13:09:17+05:30'), narration := "IOUFailed"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler1" ), type_ := TransactionType.DEBIT , amt := 50000, bal := 0,       write_date := to_datetime('2021-09-23T13:09:17+05:30'), narration := "FT"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler1" ), type_ := TransactionType.CREDIT, amt := 1806,  bal := 1806,    write_date := to_datetime('2021-09-24T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler1" ), type_ := TransactionType.DEBIT , amt := 1806,  bal := 0,       write_date := to_datetime('2021-09-24T13:09:17+05:30'), narration := "UPI"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler1" ), type_ := TransactionType.CREDIT, amt := 2612,  bal := 2612,    write_date := to_datetime('2021-09-25T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler1" ), type_ := TransactionType.DEBIT , amt := 2612,  bal := 0,       write_date := to_datetime('2021-09-25T13:09:17+05:30'), narration := "Cash"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler1" ), type_ := TransactionType.CREDIT, amt := 50000, bal := -50000,  write_date := to_datetime('2021-09-26T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler2" ), type_ := TransactionType.CREDIT, amt := 2613,  bal := -52613,  write_date := to_datetime('2021-09-26T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler2" ), type_ := TransactionType.DEBIT , amt := 2613,  bal := -50000,  write_date := to_datetime('2021-09-26T13:09:17+05:30'), narration := "UPI"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler2" ), type_ := TransactionType.CREDIT, amt := 2500,  bal := -52500,  write_date := to_datetime('2021-09-27T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler2" ), type_ := TransactionType.DEBIT , amt := 2500,  bal := -50000,  write_date := to_datetime('2021-09-27T13:09:17+05:30'), narration := "UPI"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler2" ), type_ := TransactionType.CREDIT, amt := 50000, bal := -100000, write_date := to_datetime('2021-09-28T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler1" ), type_ := TransactionType.DEBIT , amt := 50000, bal := -100000, write_date := to_datetime('2021-09-29T13:09:17+05:30'), narration := "IOU"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler1" ), type_ := TransactionType.CREDIT, amt := 50000, bal := -100000, write_date := to_datetime('2021-09-29T13:09:17+05:30'), narration := "IOUFailed"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler2" ), type_ := TransactionType.DEBIT , amt := 50000, bal := -100000, write_date := to_datetime('2021-10-04T13:09:17+05:30'), narration := "IOU"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "badrestaurant"), party := (SELECT Company FILTER .name = "wholesaler2" ), type_ := TransactionType.CREDIT, amt := 50000, bal := -100000, write_date := to_datetime('2021-10-04T13:09:17+05:30'), narration := "IOUFailed"}""")
+
+
+async def init_ledger_res_2(con):
+    async for tx in con.retrying_transaction():
+        async with tx:
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "goodrestaurant"), party := (SELECT Company FILTER .name = "wholesaler2" ), type_ := TransactionType.CREDIT, amt := 50000, bal := -50000,  write_date := to_datetime('2021-09-13T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "goodrestaurant"), party := (SELECT Company FILTER .name = "wholesaler2" ), type_ := TransactionType.DEBIT , amt := 50000, bal := -50000,  write_date := to_datetime('2021-09-20T13:09:17+05:30'), narration := "IOU"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "goodrestaurant"), party := (SELECT Company FILTER .name = "wholesaler2" ), type_ := TransactionType.DEBIT , amt := 50000, bal := 0     ,  write_date := to_datetime('2021-09-20T13:09:17+05:30'), narration := "FT"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "goodrestaurant"), party := (SELECT Company FILTER .name = "wholesaler2" ), type_ := TransactionType.CREDIT, amt := 50000, bal := -50000,  write_date := to_datetime('2021-09-22T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "goodrestaurant"), party := (SELECT Company FILTER .name = "wholesaler2" ), type_ := TransactionType.DEBIT , amt := 50000, bal := -50000,  write_date := to_datetime('2021-09-29T13:09:17+05:30'), narration := "IOU"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "goodrestaurant"), party := (SELECT Company FILTER .name = "wholesaler2" ), type_ := TransactionType.DEBIT , amt := 50000, bal := 0     ,  write_date := to_datetime('2021-09-29T13:09:17+05:30'), narration := "FT"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "goodrestaurant"), party := (SELECT Company FILTER .name = "wholesaler2" ), type_ := TransactionType.CREDIT, amt := 50000, bal := -50000,  write_date := to_datetime('2021-09-29T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "goodrestaurant"), party := (SELECT Company FILTER .name = "wholesaler1" ), type_ := TransactionType.CREDIT, amt := 20000, bal := -70000,  write_date := to_datetime('2021-09-30T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "goodrestaurant"), party := (SELECT Company FILTER .name = "wholesaler2" ), type_ := TransactionType.DEBIT , amt := 50000, bal := -70000,  write_date := to_datetime('2021-10-06T13:09:17+05:30'), narration := "IOU"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "goodrestaurant"), party := (SELECT Company FILTER .name = "wholesaler2" ), type_ := TransactionType.DEBIT , amt := 50000, bal := -20000,  write_date := to_datetime('2021-10-06T13:09:17+05:30'), narration := "FT"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "goodrestaurant"), party := (SELECT Company FILTER .name = "wholesaler1" ), type_ := TransactionType.DEBIT , amt := 20000, bal := -20000,  write_date := to_datetime('2021-10-07T13:09:17+05:30'), narration := "IOU"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "goodrestaurant"), party := (SELECT Company FILTER .name = "wholesaler1" ), type_ := TransactionType.DEBIT , amt := 20000, bal := 0     ,  write_date := to_datetime('2021-10-07T13:09:17+05:30'), narration := "FT"}""")
+
+
+async def init_ledger_whol_1(con):
+    async for tx in con.retrying_transaction():
+        async with tx:
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler1"), party := (SELECT Company FILTER .name = "badrestaurant" ), type_ :=  TransactionType.DEBIT , amt := 50000, bal :=  50000,  write_date := to_datetime('2021-09-13T13:09:17+05:30'), narration := "Sale"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler1"), party := (SELECT Company FILTER .name = "badrestaurant" ), type_ :=  TransactionType.CREDIT, amt := 50000, bal :=  50000,  write_date := to_datetime('2021-09-20T13:09:17+05:30'), narration := "IOU"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler1"), party := (SELECT Company FILTER .name = "badrestaurant" ), type_ :=  TransactionType.DEBIT , amt := 50000, bal :=  50000,  write_date := to_datetime('2021-09-20T13:09:17+05:30'), narration := "IOUFailed"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler1"), party := (SELECT Company FILTER .name = "badrestaurant" ), type_ :=  TransactionType.CREDIT, amt := 50000, bal :=  0    ,  write_date := to_datetime('2021-09-24T13:09:17+05:30'), narration := "FT"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler1"), party := (SELECT Company FILTER .name = "badrestaurant" ), type_ :=  TransactionType.DEBIT , amt := 1806,  bal :=  1806 ,  write_date := to_datetime('2021-09-24T13:09:17+05:30'), narration := "Sale"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler1"), party := (SELECT Company FILTER .name = "badrestaurant" ), type_ :=  TransactionType.CREDIT, amt := 1806,  bal :=  0    ,  write_date := to_datetime('2021-09-24T13:09:17+05:30'), narration := "UPI"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler1"), party := (SELECT Company FILTER .name = "badrestaurant" ), type_ :=  TransactionType.DEBIT , amt := 2612,  bal :=  2612 ,  write_date := to_datetime('2021-09-25T13:09:17+05:30'), narration := "Sale"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler1"), party := (SELECT Company FILTER .name = "badrestaurant" ), type_ :=  TransactionType.CREDIT, amt := 2612,  bal :=  0    ,  write_date := to_datetime('2021-09-25T13:09:17+05:30'), narration := "Cash"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler1"), party := (SELECT Company FILTER .name = "badrestaurant" ), type_ :=  TransactionType.DEBIT , amt := 50000, bal :=  50000,  write_date := to_datetime('2021-09-26T13:09:17+05:30'), narration := "Sale"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler1"), party := (SELECT Company FILTER .name = "badrestaurant" ), type_ :=  TransactionType.CREDIT, amt := 50000, bal :=  50000,  write_date := to_datetime('2021-09-29T13:09:17+05:30'), narration := "IOU"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler1"), party := (SELECT Company FILTER .name = "badrestaurant" ), type_ :=  TransactionType.DEBIT , amt := 50000, bal :=  50000,  write_date := to_datetime('2021-09-29T13:09:17+05:30'), narration := "IOUFailed"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler1"), party := (SELECT Company FILTER .name = "goodrestaurant" ), type_ := TransactionType.DEBIT , amt := 2000,  bal :=  70000,  write_date := to_datetime('2021-09-30T13:09:17+05:30'), narration := "Sale"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler1"), party := (SELECT Company FILTER .name = "goodrestaurant" ), type_ := TransactionType.CREDIT, amt := 2000,  bal :=  70000,  write_date := to_datetime('2021-09-07T13:09:17+05:30'), narration := "IOU"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler1"), party := (SELECT Company FILTER .name = "goodrestaurant" ), type_ := TransactionType.CREDIT, amt := 2000,  bal :=  50000,  write_date := to_datetime('2021-09-07T13:09:17+05:30'), narration := "FT"}""")
+
+
+async def init_ledger_whol_2(con):
+    async for tx in con.retrying_transaction():
+        async with tx:
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler2"), party := (SELECT Company FILTER .name = "badrestaurant" ) , type_ :=  TransactionType.DEBIT , amt := 2613 , bal :=  2613 ,  write_date := to_datetime('2021-09-26T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler2"), party := (SELECT Company FILTER .name = "badrestaurant" ) , type_ :=  TransactionType.CREDIT, amt := 2613 , bal :=  0    ,  write_date := to_datetime('2021-09-26T13:09:17+05:30'), narration := "Cash"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler2"), party := (SELECT Company FILTER .name = "badrestaurant" ) , type_ :=  TransactionType.DEBIT , amt := 3000 , bal :=  3000 ,  write_date := to_datetime('2021-09-27T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler2"), party := (SELECT Company FILTER .name = "badrestaurant" ) , type_ :=  TransactionType.CREDIT, amt := 3000 , bal :=  0    ,  write_date := to_datetime('2021-09-27T13:09:17+05:30'), narration := "Cash"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler2"), party := (SELECT Company FILTER .name = "badrestaurant" ) , type_ :=  TransactionType.DEBIT , amt := 50000, bal :=  50000,  write_date := to_datetime('2021-09-28T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler2"), party := (SELECT Company FILTER .name = "badrestaurant" ) , type_ :=  TransactionType.CREDIT, amt := 50000, bal :=  50000,  write_date := to_datetime('2021-10-04T13:09:17+05:30'), narration := "IOU"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler2"), party := (SELECT Company FILTER .name = "badrestaurant" ) , type_ :=  TransactionType.DEBIT , amt := 50000, bal :=  50000,  write_date := to_datetime('2021-10-04T13:09:17+05:30'), narration := "IOUFailed"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler2"), party := (SELECT Company FILTER .name = "goodrestaurant" ), type_ :=  TransactionType.DEBIT , amt := 50000, bal := 100000,  write_date := to_datetime('2021-09-13T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler2"), party := (SELECT Company FILTER .name = "goodrestaurant" ), type_ :=  TransactionType.CREDIT, amt := 50000, bal := 100000,  write_date := to_datetime('2021-09-20T13:09:17+05:30'), narration := "IOU"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler2"), party := (SELECT Company FILTER .name = "goodrestaurant" ), type_ :=  TransactionType.CREDIT, amt := 50000, bal :=  50000,  write_date := to_datetime('2021-09-20T13:09:17+05:30'), narration := "FT"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler2"), party := (SELECT Company FILTER .name = "goodrestaurant" ), type_ :=  TransactionType.DEBIT , amt := 50000, bal := 100000,  write_date := to_datetime('2021-09-22T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler2"), party := (SELECT Company FILTER .name = "goodrestaurant" ), type_ :=  TransactionType.CREDIT, amt := 50000, bal := 100000,  write_date := to_datetime('2021-09-29T13:09:17+05:30'), narration := "IOU"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler2"), party := (SELECT Company FILTER .name = "goodrestaurant" ), type_ :=  TransactionType.CREDIT, amt := 50000, bal :=  50000,  write_date := to_datetime('2021-09-29T13:09:17+05:30'), narration := "FT"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler2"), party := (SELECT Company FILTER .name = "goodrestaurant" ), type_ :=  TransactionType.DEBIT , amt := 50000, bal := 100000,  write_date := to_datetime('2021-09-29T13:09:17+05:30'), narration := "Purchase"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler2"), party := (SELECT Company FILTER .name = "goodrestaurant" ), type_ :=  TransactionType.CREDIT, amt := 50000, bal := 100000,  write_date := to_datetime('2021-10-06T13:09:17+05:30'), narration := "IOU"}""")
+            await tx.execute(
+                """INSERT LedgerEntry {owner := (SELECT Company FILTER .name = "wholesaler2"), party := (SELECT Company FILTER .name = "goodrestaurant" ), type_ :=  TransactionType.CREDIT, amt := 50000, bal :=  50000,  write_date := to_datetime('2021-10-06T13:09:17+05:30'), narration := "FT"}""")
+
 async def init_user(con: AsyncIOConnection, user_phone: str) -> None:
     async for tx in con.retrying_transaction():
         async with tx:
@@ -516,6 +655,11 @@ async def init_db(con: AsyncIOConnection) -> None:
     }
     for key, value in aa_accounts.items():
         await init_user_company(con, user_phone=user_phone, aa_disp_name=value, aa_phone=key)
+
+    await init_ledger_res_1(con)
+    await init_ledger_res_2(con)
+    await init_ledger_whol_1(con)
+    await init_ledger_whol_2(con)
 
 
 async def main() -> None:

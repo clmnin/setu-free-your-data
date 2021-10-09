@@ -13,6 +13,7 @@ import software.sauce.easyledger.cache.model.entities.AA.FiDeposit.FiDepositEnti
 import software.sauce.easyledger.cache.model.entities.AA.FiRecurringEntity
 import software.sauce.easyledger.cache.model.entities.AA.FiTermEntity
 import software.sauce.easyledger.cache.model.entities.CompanyEntity
+import software.sauce.easyledger.cache.model.entities.LedgerEntity
 import software.sauce.easyledger.cache.model.entities.UserCompanyCrossRef
 import software.sauce.easyledger.cache.model.entities.UserEntity
 
@@ -27,6 +28,7 @@ import software.sauce.easyledger.cache.model.entities.UserEntity
         FiDepositEntity::class,
         BankTransactionLineEntity::class,
         DepositTransactionCrossRef::class,
+        LedgerEntity::class
     ],
     version = 1
 )

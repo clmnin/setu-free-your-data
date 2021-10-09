@@ -6,10 +6,12 @@ import software.sauce.easyledger.cache.model.entities.AA.FiDeposit.BankTransacti
 import software.sauce.easyledger.cache.model.entities.AA.FiDeposit.FiDepositEntity
 import software.sauce.easyledger.cache.model.entities.AA.FiRecurringEntity
 import software.sauce.easyledger.cache.model.entities.AA.FiTermEntity
+import software.sauce.easyledger.cache.model.entities.LedgerEntity
 import software.sauce.easyledger.network.model.AA.AAAccount
 import software.sauce.easyledger.network.model.AA.BankTransactionLine
 import software.sauce.easyledger.network.model.AA.FIDeposit
 import software.sauce.easyledger.network.model.AA.FiFixedDeposit
+import software.sauce.easyledger.network.model.Ledger
 
 class AAMapper {
     fun mapAAToEntity(model: AAAccount, FiDepositUUID: String?, FiTermUUID: String?, FiRecurringUUID: String?): AAAccountEntity {
@@ -76,6 +78,21 @@ class AAMapper {
                 valueDate = it.valueDate,
                 currentBalance = it.currentBalance,
                 transactionTimestamp = DateTimeConverters.stringToDate(it.transactionTimestamp)
+            )
+        }
+    }
+
+    fun mapLedgerToEntity(model: List<Ledger>): List<LedgerEntity> {
+        return model.map {
+            LedgerEntity(
+                uuid=it.uuid,
+                ownerUUID = it.ownerUUID,
+                partyUUID = it.partyUUID,
+                type = it.type,
+                narration = it.narration,
+                amt = it.amt,
+                bal = it.bal,
+                writeDate = DateTimeConverters.stringToDate(it.writeDate)
             )
         }
     }

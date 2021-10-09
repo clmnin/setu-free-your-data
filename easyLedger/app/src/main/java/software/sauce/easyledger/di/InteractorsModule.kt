@@ -9,6 +9,7 @@ import software.sauce.easyledger.interactors.anumati.FetchConsentUrl
 import software.sauce.easyledger.interactors.app.Auth
 import software.sauce.easyledger.interactors.app.SyncCompanyAA
 import software.sauce.easyledger.interactors.app.SyncCompanyBank
+import software.sauce.easyledger.interactors.app.SyncCompanyLedger
 import software.sauce.easyledger.network.BackendService
 
 @Module
@@ -51,6 +52,16 @@ object InteractorsModule {
     backendService: BackendService,
   ): SyncCompanyBank {
     return SyncCompanyBank(
+      backendService=backendService
+    )
+  }
+
+  @ViewModelScoped
+  @Provides
+  fun provideSyncCompanyLedger(
+    backendService: BackendService,
+  ): SyncCompanyLedger {
+    return SyncCompanyLedger(
       backendService=backendService
     )
   }

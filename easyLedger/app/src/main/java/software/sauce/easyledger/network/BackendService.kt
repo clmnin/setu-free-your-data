@@ -3,6 +3,7 @@ package software.sauce.easyledger.network
 import retrofit2.http.*
 import software.sauce.easyledger.network.model.AA.CompanyBankTransaction
 import software.sauce.easyledger.network.model.AA.CompanyWithAA
+import software.sauce.easyledger.network.model.LedgerResponse
 import software.sauce.easyledger.network.model.UserProfileToken
 
 interface BackendService {
@@ -19,4 +20,7 @@ interface BackendService {
 
     @GET("api/v1/company/bank-transaction")
     suspend fun getCompanyBankTransactions(@Query("company_id") companyUUID: String): CompanyBankTransaction
+
+    @GET("api/v1/company/ledger")
+    suspend fun getLedger(@Query("company_id") companyUUID: String): LedgerResponse
 }

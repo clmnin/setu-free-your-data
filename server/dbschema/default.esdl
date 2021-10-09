@@ -118,23 +118,18 @@ module default {
         required property transactionTimestamp -> datetime;
     }
 
-    type Ledger {
+    type LedgerEntry {
         required link owner -> Company;
         required link party -> Company;
+        required property lid -> LedgerGlobalNo;
+        required property type_ -> TransactionType;
+        required property amt -> int32;
+        required property bal -> int32;
+        required property narration -> str;
         property write_date -> datetime {
             default := datetime_current();
         }
         index on (.owner);
         index on (.party);
-        constraint exclusive on ( (.owner, .party) );
-    }
-    type LedgerEntry {
-        required property lid -> LedgerGlobalNo;
-        required property type_ -> TransactionType;
-        required property amt -> int32;
-        required property bal -> int32;
-        property write_date -> datetime {
-            default := datetime_current();
-        }
     }
 }

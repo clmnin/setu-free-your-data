@@ -1,4 +1,4 @@
-CREATE MIGRATION m1qiwkvvz23h7t45kv7v3yygl7xjzrt443bpqulllcif7d7gfqsp7q
+CREATE MIGRATION m132mvylapmydja2uarn5ocgums3hmylou6qroc7l556gehosvp4fq
     ONTO initial
 {
   CREATE TYPE default::CreditCard {
@@ -110,21 +110,17 @@ CREATE MIGRATION m1qiwkvvz23h7t45kv7v3yygl7xjzrt443bpqulllcif7d7gfqsp7q
           SET default := (std::datetime_current());
       };
   };
-  CREATE TYPE default::Ledger {
+  CREATE SCALAR TYPE default::LedgerGlobalNo EXTENDING std::sequence;
+  CREATE TYPE default::LedgerEntry {
       CREATE REQUIRED LINK owner -> default::Company;
       CREATE REQUIRED LINK party -> default::Company;
       CREATE CONSTRAINT std::exclusive ON ((.owner, .party));
       CREATE INDEX ON (.party);
       CREATE INDEX ON (.owner);
-      CREATE PROPERTY write_date -> std::datetime {
-          SET default := (std::datetime_current());
-      };
-  };
-  CREATE SCALAR TYPE default::LedgerGlobalNo EXTENDING std::sequence;
-  CREATE TYPE default::LedgerEntry {
       CREATE REQUIRED PROPERTY amt -> std::int32;
       CREATE REQUIRED PROPERTY bal -> std::int32;
       CREATE REQUIRED PROPERTY lid -> default::LedgerGlobalNo;
+      CREATE REQUIRED PROPERTY narration -> std::str;
       CREATE REQUIRED PROPERTY type_ -> default::TransactionType;
       CREATE PROPERTY write_date -> std::datetime {
           SET default := (std::datetime_current());

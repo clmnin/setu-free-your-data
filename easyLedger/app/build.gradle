@@ -103,7 +103,7 @@ dependencies {
     implementation Square.retrofit_gson
     implementation Square.okHttp
     implementation Square.okHttpLoggingInterceptor
-    implementation Square.leak_canary
+    debugImplementation Square.leak_canary
 
     kapt AnnotationProcessing.hilt_compiler
     kapt AnnotationProcessing.room_compiler

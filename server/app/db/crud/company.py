@@ -6,7 +6,7 @@ from edgedb import AsyncIOConnection, NoDataError
 from fastapi import HTTPException
 from pydantic import parse_raw_as
 
-from app.middleware.schema.company import CompanyWithAA
+from app.middleware.schema.company import CompanyWithAA, Ledger, LedgerResponse
 from app.middleware.schema.fi_data import BankTransactions
 
 
@@ -154,6 +154,40 @@ async def get_bank_transactions(
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"{e}")
     return parse_raw_as(BankTransactions, result)
+
+
+async def get_ledger(
+    con: AsyncIOConnection, *, company_id: UUID
+) -> Optional[LedgerResponse]:
+    try:
+        async for tx in con.retrying_transaction():
+            async with tx:
+                result = await tx.query_single_json(
+                    """
+                    SELECT<json> {
+                        data := array_agg((
+                            SELECT LedgerEntry {
+                                id,
+                                owner_ := .owner.id,
+                                party_ := .party.id,
+                                lid,
+                                type_,
+                                amt,
+                                bal,
+                                narration,
+                                write_date
+                            } FILTER 
+                                .owner.id = <uuid>$company_id
+                        ))
+                    }
+                    """,
+                    company_id=company_id
+                )
+    except NoDataError:
+        return None
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"{e}")
+    return parse_raw_as(LedgerResponse, result)
 
 
 async def link_aa(

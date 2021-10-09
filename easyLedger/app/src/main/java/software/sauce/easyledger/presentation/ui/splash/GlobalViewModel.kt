@@ -24,6 +24,7 @@ import software.sauce.easyledger.cache.model.mapper.AAMapper
 import software.sauce.easyledger.interactors.app.Auth
 import software.sauce.easyledger.interactors.app.SyncCompanyAA
 import software.sauce.easyledger.interactors.app.SyncCompanyBank
+import software.sauce.easyledger.interactors.app.SyncCompanyLedger
 import software.sauce.easyledger.network.model.UserProfile
 import software.sauce.easyledger.presentation.BaseApplication.Companion.prefs
 import software.sauce.easyledger.presentation.navigation.Screen
@@ -38,6 +39,7 @@ constructor(
     private val auth: Auth,
     private val syncCompanyAA: SyncCompanyAA,
     private val syncCompanyBank: SyncCompanyBank,
+    private val syncCompanyLedger: SyncCompanyLedger,
     private val userDao: UserDao,
     private val companyDao: CompanyDao,
     private val aADao: AADao,
@@ -101,8 +103,11 @@ constructor(
         val syncAAEventChannel = Channel<AsyncEvent<List<String>>>(Channel.BUFFERED)
         val syncAAEventsFlow = syncAAEventChannel.receiveAsFlow()
 
-        val syncBankEventChannel = Channel<AsyncEvent<Boolean>>(Channel.BUFFERED)
+        val syncBankEventChannel = Channel<AsyncEvent<List<String>>>(Channel.BUFFERED)
         val syncBankEventsFlow = syncBankEventChannel.receiveAsFlow()
+
+        val syncLedgerEventChannel = Channel<AsyncEvent<Boolean>>(Channel.BUFFERED)
+        val syncLedgerEventsFlow = syncLedgerEventChannel.receiveAsFlow()
         authEventsFlow.onEach {
             when(it) {
                 is AsyncEvent.Success -> {
@@ -124,6 +129,16 @@ constructor(
             }
         }.launchIn(viewModelScope)
         syncBankEventsFlow.onEach {
+            when(it) {
+                is AsyncEvent.Success -> {
+                    getCompanyLedger(it.value, syncLedgerEventChannel)
+                }
+                is AsyncEvent.Error -> {
+                    callback(null, "Failed to sync data.")
+                }
+            }
+        }.launchIn(viewModelScope)
+        syncLedgerEventsFlow.onEach {
             when(it) {
                 is AsyncEvent.Success -> {
                     callback(null, null)
@@ -206,7 +221,7 @@ constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun getCompanyBankTransactions(companies: List<String>, channel: Channel<AsyncEvent<Boolean>>) {
+    private fun getCompanyBankTransactions(companies: List<String>, channel: Channel<AsyncEvent<List<String>>>) {
         syncCompanyBank.execute(companies, connectivityManager.isNetworkAvailable.value).onEach { dataState ->
             _isLoading.emit(dataState.loading)
 
@@ -234,6 +249,27 @@ constructor(
                             }
                         }
                     }
+                }
+                channel.send(AsyncEvent.Success(data.map { it.key }))
+            }
+
+            dataState.error?.let { error ->
+                channel.send(AsyncEvent.Error(error))
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getCompanyLedger(companies: List<String>, channel: Channel<AsyncEvent<Boolean>>) {
+        syncCompanyLedger.execute(companies, connectivityManager.isNetworkAvailable.value).onEach { dataState ->
+            _isLoading.emit(dataState.loading)
+
+            dataState.data?.let { data ->
+                data.forEach{
+                    val companyUUID = it.key
+                    val entries = it.value
+                    companyDao.insertLedger(AAMapper.mapLedgerToEntity(entries.data))
+                    // get company and it's linked AA
+                    val company = companyDao.getCompany(companyUUID)
                 }
                 channel.send(AsyncEvent.Success(true))
             }
