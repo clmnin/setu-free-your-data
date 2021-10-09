@@ -11,6 +11,7 @@ class FiData(BaseModel):
 
 
 class TransactionLine(BaseModel):
+    id: UUID
     mode: str
     trans_type: str
     txnId: str
@@ -30,7 +31,10 @@ class FiDeposit(FiData):
     pending_amt: int
     ifscCode: str
     micrCode: str
-    # transactions: List[TransactionLine]
+
+
+class BankTransactions(BaseModel):
+    data: List[TransactionLine]
 
 
 class FiFD(FiData):

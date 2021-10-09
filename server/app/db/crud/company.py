@@ -7,6 +7,7 @@ from fastapi import HTTPException
 from pydantic import parse_raw_as
 
 from app.middleware.schema.company import CompanyWithAA
+from app.middleware.schema.fi_data import BankTransactions
 
 
 async def create(
@@ -115,6 +116,44 @@ async def get_with_aa(
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"{e}")
     return parse_raw_as(CompanyWithAA, result)
+
+
+async def get_bank_transactions(
+    con: AsyncIOConnection, *, company_id: UUID
+) -> Optional[BankTransactions]:
+    try:
+        async for tx in con.retrying_transaction():
+            async with tx:
+                result = await tx.query_single_json(
+                    """
+                    SELECT<json> {
+                        data := array_agg((
+                            SELECT TransactionLine {
+                                id,
+                                mode,
+                                trans_type,
+                                txnId,
+                                amount,
+                                text,
+                                narration,
+                                reference,
+                                valueDate,
+                                currentBalance,
+                                transactionTimestamp
+                            } FILTER 
+                                .<transactions[IS Deposit]
+                                .<fi_deposit[IS AAAccount]
+                                .<aa[IS Company].id = <uuid>$company_id
+                        ))
+                    }
+                    """,
+                    company_id=company_id
+                )
+    except NoDataError:
+        return None
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"{e}")
+    return parse_raw_as(BankTransactions, result)
 
 
 async def link_aa(
