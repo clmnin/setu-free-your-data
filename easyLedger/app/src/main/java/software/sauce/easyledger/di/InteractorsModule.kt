@@ -7,7 +7,8 @@ import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import software.sauce.easyledger.interactors.anumati.FetchConsentUrl
 import software.sauce.easyledger.interactors.app.Auth
-import software.sauce.easyledger.interactors.app.SyncCompany
+import software.sauce.easyledger.interactors.app.SyncCompanyAA
+import software.sauce.easyledger.interactors.app.SyncCompanyBank
 import software.sauce.easyledger.network.BackendService
 
 @Module
@@ -36,10 +37,20 @@ object InteractorsModule {
 
   @ViewModelScoped
   @Provides
-  fun provideSyncCompany(
+  fun provideSyncCompanyAA(
     backendService: BackendService,
-  ): SyncCompany {
-    return SyncCompany(
+  ): SyncCompanyAA {
+    return SyncCompanyAA(
+      backendService=backendService
+    )
+  }
+
+  @ViewModelScoped
+  @Provides
+  fun provideSyncCompanyBank(
+    backendService: BackendService,
+  ): SyncCompanyBank {
+    return SyncCompanyBank(
       backendService=backendService
     )
   }

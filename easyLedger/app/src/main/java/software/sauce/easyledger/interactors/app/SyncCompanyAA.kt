@@ -8,7 +8,7 @@ import software.sauce.easyledger.domain.data.DataState
 import software.sauce.easyledger.network.BackendService
 import software.sauce.easyledger.network.model.AA.CompanyWithAA
 
-class SyncCompany(
+class SyncCompanyAA(
     private val backendService: BackendService,
 ) {
     fun execute(

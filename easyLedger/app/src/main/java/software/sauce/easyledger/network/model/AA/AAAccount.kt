@@ -23,4 +23,10 @@ data class AAAccount(
 
     @SerializedName("fi_deposit")
     var FiDeposit: FIDeposit?,
+
+    @SerializedName("fi_term")
+    var FiTerm: FiFixedDeposit?,
+
+    @SerializedName("fi_recurring")
+    var FiRecurring: FiFixedDeposit?,
 )
