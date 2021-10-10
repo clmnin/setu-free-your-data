@@ -18,7 +18,9 @@ import androidx.compose.ui.unit.dp
 import software.sauce.easyledger.R
 import software.sauce.easyledger.cache.model.entities.CompanyEntity
 import software.sauce.easyledger.presentation.components.CompanyBasicCard
+import software.sauce.easyledger.presentation.components.DateSelector
 import software.sauce.easyledger.presentation.components.NothingHere
+import software.sauce.easyledger.presentation.navigation.Screen
 import software.sauce.easyledger.presentation.theme.*
 
 @Composable
@@ -76,17 +78,22 @@ fun HomeScreenComponents(
             BankBalanceComponent(
                 bankBalance = currentBalance,
                 todayIn = todayCredit.toString(),
-                todayOut = todayDebit.toString()
+                todayOut = todayDebit.toString(),
+                onClick = {
+                    val currentCompany = viewModel.selectedCompanyUUID
+                    if (currentCompany != null) {
+                        val route = Screen.Bank.route + "/${currentBalance}"
+                        onNavigation(route)
+                    }
+                }
             )
-            PartnerLedger(partners, onClick = {
-
-            })
+            PartnerLedger(partners, onNavigation)
         }
     }
 }
 
 @Composable
-fun PartnerLedger(companies: List<CompanyEntity>, onClick: () -> Unit) {
+fun PartnerLedger(companies: List<CompanyEntity>, onNavigation: (String) -> Unit,) {
     Column(modifier = Modifier.background(color = GhostWhite)) {
         Text(
             text = "Ledgers",
@@ -103,7 +110,10 @@ fun PartnerLedger(companies: List<CompanyEntity>, onClick: () -> Unit) {
                 ) { _, company ->
                     CompanyBasicCard(
                         company = company,
-                        onClick = onClick
+                        onClick = {
+                            val route = Screen.Ledger.route + "/${company.uuid}"
+                            onNavigation(route)
+                        }
                     )
                 }
             }
@@ -112,34 +122,12 @@ fun PartnerLedger(companies: List<CompanyEntity>, onClick: () -> Unit) {
 }
 
 @Composable
-fun DateSelector(
-    date: String = "Oct 10",
-    onClick: () -> Unit
-) {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(15.dp)
-            .clickable(onClick = onClick)
-    ) {
-        Text(
-            text = "Today, $date",
-            style = MaterialTheme.typography.h2
-        )
-        Text(
-            text = "Change the date to see the app in action!",
-            style = MaterialTheme.typography.body1
-        )
-    }
-}
-
-@Composable
 fun BankBalanceComponent(
     color: Color = GhostWhite,
     bankBalance: Long = 1000,
     todayIn: String = "100",
-    todayOut: String = "200"
+    todayOut: String = "200",
+    onClick: () -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -149,7 +137,7 @@ fun BankBalanceComponent(
             .clip(RoundedCornerShape(10.dp))
             .background(color)
             .padding(horizontal = 15.dp, vertical = 20.dp)
-            .fillMaxWidth()
+            .fillMaxWidth().clickable(onClick = onClick)
     ) {
         Text(
             text = "In Bank",

@@ -18,8 +18,10 @@ import software.sauce.easyledger.presentation.navigation.Screen
 import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
 import software.sauce.easyledger.presentation.ui.anumati.AnumatiViewModel
 import software.sauce.easyledger.presentation.ui.anumati.AnumatiWebView
+import software.sauce.easyledger.presentation.ui.bank.BankScreen
 import software.sauce.easyledger.presentation.ui.home.CompanyViewModel
 import software.sauce.easyledger.presentation.ui.home.HomeScreen
+import software.sauce.easyledger.presentation.ui.ledger.LedgerScreen
 import software.sauce.easyledger.presentation.ui.select_company.SelectCompanyScreen
 import software.sauce.easyledger.presentation.ui.sign_in.SignInAndOtp
 import software.sauce.easyledger.presentation.ui.splash.GlobalViewModel
@@ -81,6 +83,26 @@ class MainActivity : ComponentActivity() {
                         companyViewModel.setCompanyUUID(navBackStackEntry.arguments?.getString("company_uuid") ?: "",)
                         viewModel.onLoad.value = false
                         HomeScreen(
+                            onNavigation = navController::navigate,
+                            viewModel = companyViewModel,
+                            false
+                        )
+                    }
+                    composable(
+                        route = Screen.Ledger.route + "/{partner_uuid}",
+                        arguments = listOf(navArgument("partner_uuid") { type = NavType.StringType }),
+                    ) { navBackStackEntry ->
+                        LedgerScreen(
+                            onNavigation = navController::navigate,
+                            viewModel = companyViewModel,
+                            false
+                        )
+                    }
+                    composable(
+                        route = Screen.Bank.route + "/{company_uuid}",
+                        arguments = listOf(navArgument("company_uuid") { type = NavType.StringType }),
+                    ) { navBackStackEntry ->
+                        BankScreen(
                             onNavigation = navController::navigate,
                             viewModel = companyViewModel,
                             false
