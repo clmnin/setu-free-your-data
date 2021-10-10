@@ -1,6 +1,7 @@
 package software.sauce.easyledger.presentation.ui.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -21,12 +22,6 @@ fun HomeScreen(
     company_uuid: String,
     viewModel: CompanyViewModel
 ) {
-    val companyBankTransactions = viewModel.companyBankTransactions.collectAsState().value
-    val onLoad = viewModel.onLoad.value
-    if (!onLoad) {
-        viewModel.onLoad.value = true
-        viewModel.getCompanyDeposit()
-    }
     EasyLedgerTheme()
     {
         Scaffold(backgroundColor = DeepBlue,
@@ -44,34 +39,50 @@ fun HomeScreen(
                 )
             }
         ) {
-            HomeScreenComponents()
+            HomeScreenComponents(viewModel)
         }
     }
 }
 
 @Composable
-fun HomeScreenComponents() {
+fun HomeScreenComponents(viewModel: CompanyViewModel) {
+    val currentDate = viewModel.currentDate.collectAsState().value
+    val todayCredit = viewModel.companyTodayCredit.collectAsState().value
+    val todayDebit = viewModel.companyTodayDebit.collectAsState().value
+    val currentBalance = viewModel.companyCurrentBalance.collectAsState().value
+    val onLoad = viewModel.onLoad.value
+    if (!onLoad) {
+        viewModel.onLoad.value = true
+        viewModel.getCompanyDeposit()
+    }
     Box(
         modifier = Modifier
             .background(DeepBlue)
             .fillMaxSize()
     ) {
         Column {
-            DateSelector()
-            BankBalanceComponent()
+            DateSelector(currentDate.text, onClick = {
+                viewModel.nextDate()
+            })
+            BankBalanceComponent(
+                bankBalance = currentBalance,
+                todayIn = todayCredit.toString(),
+                todayOut = todayDebit.toString()
+            )
         }
     }
 }
 
 @Composable
 fun DateSelector(
-    date: String = "Oct 10"
+    date: String = "Oct 10",
+    onClick: () -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(15.dp)
+            .padding(15.dp).clickable(onClick = onClick)
     ) {
         Text(
             text = "Today, $date",
@@ -87,7 +98,7 @@ fun DateSelector(
 @Composable
 fun BankBalanceComponent(
     color: Color = GhostWhite,
-    bankBalance: Int = 1000,
+    bankBalance: Long = 1000,
     todayIn: String = "100",
     todayOut: String = "200"
 ) {
