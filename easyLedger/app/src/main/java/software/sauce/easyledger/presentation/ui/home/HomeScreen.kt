@@ -3,6 +3,8 @@ package software.sauce.easyledger.presentation.ui.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -14,13 +16,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import software.sauce.easyledger.R
+import software.sauce.easyledger.cache.model.entities.CompanyEntity
+import software.sauce.easyledger.presentation.components.CompanyBasicCard
+import software.sauce.easyledger.presentation.components.NothingHere
 import software.sauce.easyledger.presentation.theme.*
 
 @Composable
 fun HomeScreen(
     onNavigation: (String) -> Unit,
-    company_uuid: String,
-    viewModel: CompanyViewModel
+    viewModel: CompanyViewModel,
+    onLoad: Boolean
 ) {
     EasyLedgerTheme()
     {
@@ -39,18 +44,22 @@ fun HomeScreen(
                 )
             }
         ) {
-            HomeScreenComponents(viewModel)
+            HomeScreenComponents(viewModel, onNavigation, onLoad)
         }
     }
 }
 
 @Composable
-fun HomeScreenComponents(viewModel: CompanyViewModel) {
+fun HomeScreenComponents(
+    viewModel: CompanyViewModel,
+    onNavigation: (String) -> Unit,
+    onLoad: Boolean
+) {
     val currentDate = viewModel.currentDate.collectAsState().value
     val todayCredit = viewModel.companyTodayCredit.collectAsState().value
     val todayDebit = viewModel.companyTodayDebit.collectAsState().value
     val currentBalance = viewModel.companyCurrentBalance.collectAsState().value
-    val onLoad = viewModel.onLoad.value
+    val partners = viewModel.companyLedgerCompanies.collectAsState().value
     if (!onLoad) {
         viewModel.onLoad.value = true
         viewModel.getCompanyDeposit()
@@ -69,6 +78,35 @@ fun HomeScreenComponents(viewModel: CompanyViewModel) {
                 todayIn = todayCredit.toString(),
                 todayOut = todayDebit.toString()
             )
+            PartnerLedger(partners, onClick = {
+
+            })
+        }
+    }
+}
+
+@Composable
+fun PartnerLedger(companies: List<CompanyEntity>, onClick: () -> Unit) {
+    Column(modifier = Modifier.background(color = GhostWhite)) {
+        Text(
+            text = "Ledgers",
+            style = MaterialTheme.typography.h2,
+            modifier = Modifier.padding(15.dp),
+            color = Gray
+        )
+        if (companies.isEmpty()) {
+            NothingHere()
+        } else {
+            LazyColumn {
+                itemsIndexed(
+                    items = companies
+                ) { _, company ->
+                    CompanyBasicCard(
+                        company = company,
+                        onClick = onClick
+                    )
+                }
+            }
         }
     }
 }
@@ -82,7 +120,8 @@ fun DateSelector(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(15.dp).clickable(onClick = onClick)
+            .padding(15.dp)
+            .clickable(onClick = onClick)
     ) {
         Text(
             text = "Today, $date",

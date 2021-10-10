@@ -78,10 +78,12 @@ class MainActivity : ComponentActivity() {
                         route = Screen.Home.route + "/{company_uuid}",
                         arguments = listOf(navArgument("company_uuid") { type = NavType.StringType }),
                     ) { navBackStackEntry ->
+                        companyViewModel.setCompanyUUID(navBackStackEntry.arguments?.getString("company_uuid") ?: "",)
+                        viewModel.onLoad.value = false
                         HomeScreen(
                             onNavigation = navController::navigate,
-                            company_uuid = navBackStackEntry.arguments?.getString("company_uuid") ?: "",
-                            viewModel = companyViewModel
+                            viewModel = companyViewModel,
+                            false
                         )
                     }
                     composable(
