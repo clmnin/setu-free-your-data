@@ -41,8 +41,7 @@ constructor(
     private val connectivityManager: ConnectivityManager,
     private val state: SavedStateHandle,
 ): ViewModel(){
-    private var _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> get() = _isLoading
+    val isConsentRequired: MutableState<Boolean> = mutableStateOf(true)
     val onLoad: MutableState<Boolean> = mutableStateOf(false)
 
     private var _companyBankTransactions: MutableStateFlow<List<BankTransactionLineEntity>> = MutableStateFlow(ArrayList())

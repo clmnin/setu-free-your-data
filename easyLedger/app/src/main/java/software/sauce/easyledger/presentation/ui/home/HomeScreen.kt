@@ -57,6 +57,7 @@ fun HomeScreenComponents(
     onNavigation: (String) -> Unit,
     onLoad: Boolean
 ) {
+    val isConsentRequired = viewModel.isConsentRequired.value
     val currentDate = viewModel.currentDate.collectAsState().value
     val todayCredit = viewModel.companyTodayCredit.collectAsState().value
     val todayDebit = viewModel.companyTodayDebit.collectAsState().value
@@ -75,19 +76,26 @@ fun HomeScreenComponents(
             DateSelector(currentDate.text, onClick = {
                 viewModel.nextDate()
             })
-            BankBalanceComponent(
-                bankBalance = currentBalance,
-                todayIn = todayCredit.toString(),
-                todayOut = todayDebit.toString(),
-                onClick = {
-//                    val currentCompany = viewModel.selectedCompanyUUID
-//                    if (currentCompany != null) {
-//                        val route = Screen.Bank.route + "/${currentBalance}"
-//                        onNavigation(route)
-//                    }
-                    onNavigation(Screen.ConsentMobileNumber.route)
-                }
-            )
+            if (isConsentRequired) {
+                LinkBankAccount(
+                    onClick = {
+                        onNavigation(Screen.ConsentMobileNumber.route)
+                    }
+                )
+            } else {
+                BankBalanceComponent(
+                    bankBalance = currentBalance,
+                    todayIn = todayCredit.toString(),
+                    todayOut = todayDebit.toString(),
+                    onClick = {
+                        val currentCompany = viewModel.selectedCompanyUUID
+                        if (currentCompany != null) {
+                            val route = Screen.Bank.route + "/${currentBalance}"
+                            onNavigation(route)
+                        }
+                    }
+                )
+            }
             PartnerLedger(partners, onNavigation)
         }
     }
@@ -123,6 +131,29 @@ fun PartnerLedger(companies: List<CompanyEntity>, onNavigation: (String) -> Unit
 }
 
 @Composable
+fun LinkBankAccount(
+    color: Color = GhostWhite,
+    onClick: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .padding(15.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(color)
+            .padding(horizontal = 15.dp, vertical = 20.dp)
+            .fillMaxWidth().clickable(onClick = onClick)
+    ) {
+        Text(
+            text = "Link Bank Account",
+            style = MaterialTheme.typography.h2,
+            color = Gray
+        )
+    }
+}
+
+@Composable
 fun BankBalanceComponent(
     color: Color = GhostWhite,
     bankBalance: Long = 1000,
@@ -138,7 +169,8 @@ fun BankBalanceComponent(
             .clip(RoundedCornerShape(10.dp))
             .background(color)
             .padding(horizontal = 15.dp, vertical = 20.dp)
-            .fillMaxWidth().clickable(onClick = onClick)
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
     ) {
         Text(
             text = "In Bank",

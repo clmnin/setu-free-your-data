@@ -13,12 +13,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import software.sauce.easyledger.presentation.components.CenterOfScreen
 import software.sauce.easyledger.presentation.navigation.Screen
+import software.sauce.easyledger.presentation.ui.home.CompanyViewModel
 
 @Composable
 fun AnumatiWebView(
     onNavigation: (String) -> Unit,
     phone: String,
-    webViewModel: AnumatiViewModel
+    webViewModel: AnumatiViewModel,
+    companyViewModel: CompanyViewModel
 ) {
     val onLoad = webViewModel.onLoad.value
     if (!onLoad) {
@@ -55,6 +57,7 @@ fun AnumatiWebView(
                         ): Boolean {
                             // cancel the current request if the url is the redirect url
                             return if (request?.url.toString().contains("/redirect")) {
+                                companyViewModel.isConsentRequired.value = false
                                 onNavigation(Screen.SelectCompany.route)
                                 true
                             } else {

@@ -123,7 +123,8 @@ class MainActivity : ComponentActivity() {
                         AnumatiWebView(
                             onNavigation = navController::navigate,
                             phone = navBackStackEntry.arguments?.getString("phone") ?: "",
-                            webViewModel=anumatiViewModel
+                            webViewModel=anumatiViewModel,
+                            companyViewModel = companyViewModel
                         )
                     }
                 }
