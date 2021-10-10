@@ -108,9 +108,42 @@ fun BankEntries(entries: List<BankTransactionLineEntity>) {
                                 .fillMaxWidth()
                         ) {
                             Text(
-                                text = entry.text ?: "N/A",
-                                style = MaterialTheme.typography.h2,
+                                text = entry.transactionTimestamp.toString().substring(4..10),
+                                style = MaterialTheme.typography.body1,
                                 color = Gray
+                            )
+                            Divider(
+                                color = LightGray,
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .width(1.dp)
+                            )
+                            Text(
+                                text = entry.text ?: "N/A",
+                                style = MaterialTheme.typography.body1,
+                                color = Gray
+                            )
+                            Divider(
+                                color = LightGray,
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .width(1.dp)
+                            )
+                            Text(
+                                text = entry.transaType,
+                                style = MaterialTheme.typography.body1,
+                                color = Gray
+                            )
+                            Divider(
+                                color = LightGray,
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .width(1.dp)
+                            )
+                            Text(
+                                text = entry.amount.toString(),
+                                style = MaterialTheme.typography.body1,
+                                color = if (entry.transaType == "CREDIT") CurrencyGreen else CurrencyRed
                             )
                         }
                     }
