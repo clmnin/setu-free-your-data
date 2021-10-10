@@ -18,6 +18,7 @@ import software.sauce.easyledger.presentation.navigation.Screen
 import software.sauce.easyledger.presentation.theme.EasyLedgerTheme
 import software.sauce.easyledger.presentation.ui.anumati.AnumatiViewModel
 import software.sauce.easyledger.presentation.ui.anumati.AnumatiWebView
+import software.sauce.easyledger.presentation.ui.anumati.ConsentMobile
 import software.sauce.easyledger.presentation.ui.bank.BankScreen
 import software.sauce.easyledger.presentation.ui.home.CompanyViewModel
 import software.sauce.easyledger.presentation.ui.home.HomeScreen
@@ -106,6 +107,12 @@ class MainActivity : ComponentActivity() {
                             onNavigation = navController::navigate,
                             viewModel = companyViewModel,
                             false
+                        )
+                    }
+                    composable(route = Screen.ConsentMobileNumber.route) { navBackStackEntry ->
+                        ConsentMobile(
+                            onNavigation = navController::navigate,
+                            viewModel
                         )
                     }
                     composable(

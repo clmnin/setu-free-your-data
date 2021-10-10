@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import software.sauce.easyledger.domain.data.DataState
 import software.sauce.easyledger.network.BackendService
+import software.sauce.easyledger.network.model.ConsentUrlRequest
 
 class FetchConsentUrl(
     private val backendService: BackendService,
@@ -26,6 +27,6 @@ class FetchConsentUrl(
     }
 
     private suspend fun getConsentUrlFromBackend(phone: String): String {
-        return backendService.requestConsent(phone)
+        return backendService.requestConsent(ConsentUrlRequest(phone=phone, fiType= listOf("DEPOSIT")))
     }
 }

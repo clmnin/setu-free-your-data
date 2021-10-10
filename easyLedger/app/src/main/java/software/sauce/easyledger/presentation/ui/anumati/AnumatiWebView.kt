@@ -55,7 +55,7 @@ fun AnumatiWebView(
                         ): Boolean {
                             // cancel the current request if the url is the redirect url
                             return if (request?.url.toString().contains("/redirect")) {
-                                onNavigation(Screen.Home.route)
+                                onNavigation(Screen.SelectCompany.route)
                                 true
                             } else {
                                 false

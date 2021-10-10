@@ -80,11 +80,12 @@ fun HomeScreenComponents(
                 todayIn = todayCredit.toString(),
                 todayOut = todayDebit.toString(),
                 onClick = {
-                    val currentCompany = viewModel.selectedCompanyUUID
-                    if (currentCompany != null) {
-                        val route = Screen.Bank.route + "/${currentBalance}"
-                        onNavigation(route)
-                    }
+//                    val currentCompany = viewModel.selectedCompanyUUID
+//                    if (currentCompany != null) {
+//                        val route = Screen.Bank.route + "/${currentBalance}"
+//                        onNavigation(route)
+//                    }
+                    onNavigation(Screen.ConsentMobileNumber.route)
                 }
             )
             PartnerLedger(partners, onNavigation)
