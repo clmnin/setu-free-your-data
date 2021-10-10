@@ -108,9 +108,42 @@ fun LedgerEntries(entries: List<LedgerEntity>) {
                                 .fillMaxWidth()
                         ) {
                             Text(
-                                text = entry.narration,
-                                style = MaterialTheme.typography.h2,
+                                text = entry.writeDate.toString().substring(4..10),
+                                style = MaterialTheme.typography.body1,
                                 color = Gray
+                            )
+                            Divider(
+                                color = LightGray,
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .width(1.dp)
+                            )
+                            Text(
+                                text = entry.narration,
+                                style = MaterialTheme.typography.body1,
+                                color = Gray
+                            )
+                            Divider(
+                                color = LightGray,
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .width(1.dp)
+                            )
+                            Text(
+                                text = entry.type,
+                                style = MaterialTheme.typography.body1,
+                                color = Gray
+                            )
+                            Divider(
+                                color = LightGray,
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .width(1.dp)
+                            )
+                            Text(
+                                text = entry.amt.toString(),
+                                style = MaterialTheme.typography.body1,
+                                color = if (entry.type == "CREDIT") CurrencyGreen else CurrencyRed
                             )
                         }
                     }
