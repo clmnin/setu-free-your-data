@@ -23,8 +23,6 @@ import software.sauce.easyledger.cache.model.mapper.AAMapper
 import software.sauce.easyledger.interactors.app.Auth
 import software.sauce.easyledger.interactors.app.SyncCompanyAA
 import software.sauce.easyledger.interactors.app.SyncCompanyBank
-import software.sauce.easyledger.network.model.Ledger
-import software.sauce.easyledger.presentation.BaseApplication
 import software.sauce.easyledger.presentation.utils.ConnectivityManager
 import javax.inject.Inject
 
@@ -49,10 +47,8 @@ constructor(
 
     private var _companyBankTransactions: MutableStateFlow<List<BankTransactionLineEntity>> = MutableStateFlow(ArrayList())
     val companyBankTransactions: StateFlow<List<BankTransactionLineEntity>> get() = _companyBankTransactions
-
     private var _companyLedgerEntry: MutableStateFlow<List<LedgerEntity>> = MutableStateFlow(ArrayList())
     val companyLedgerEntry: StateFlow<List<LedgerEntity>> get() = _companyLedgerEntry
-
     private var _companyLedgerCompanies: MutableStateFlow<List<CompanyEntity>> = MutableStateFlow(
         emptyList())
     val companyLedgerCompanies: StateFlow<List<CompanyEntity>> get() = _companyLedgerCompanies
@@ -152,11 +148,11 @@ constructor(
             it.transactionTimestamp <  _currentDate.value.date
         }
         val todayCredit = visibleBankTransactions.filter {
-            it.transactionTimestamp == _currentDate.value.date
-        }.map { if (it.transaType == "CREDIT") it.amount else 0 }
+            it.transactionTimestamp == _currentDate.value.date && it.transaType == "CREDIT"
+        }.map { it.amount }
         val todayDebit = visibleBankTransactions.filter {
-            it.transactionTimestamp == _currentDate.value.date
-        }.map { if (it.transaType == "DEBIT") it.amount else 0 }
+            it.transactionTimestamp == _currentDate.value.date && it.transaType == "DEBIT"
+        }.map { it.amount }
         _companyCurrentBalance.value = if (visibleBankTransactions.isNullOrEmpty()) {
             0
         } else {
