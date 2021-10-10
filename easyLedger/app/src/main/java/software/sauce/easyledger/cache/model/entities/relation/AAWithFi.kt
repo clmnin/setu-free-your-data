@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import software.sauce.easyledger.cache.model.entities.AA.AAAccountEntity
 import software.sauce.easyledger.cache.model.entities.AA.FiDeposit.FiDepositEntity
+import software.sauce.easyledger.cache.model.entities.AA.FiTermEntity
 
 data class AAWithFi(
     @Embedded
@@ -13,5 +14,11 @@ data class AAWithFi(
         parentColumn = "fi_deposit",
         entityColumn = "uuid"
     )
-    val deposit: FiDepositWithTransactions?
+    val deposit: FiDepositWithTransactions?,
+    @Relation(
+        entity = FiTermEntity::class,
+        parentColumn = "fi_term",
+        entityColumn = "uuid"
+    )
+    val term: FiTermEntity?
 )

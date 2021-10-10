@@ -7,9 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import software.sauce.easyledger.cache.converter.DateTimeConverters
 import software.sauce.easyledger.cache.dao.AADao
@@ -23,6 +22,7 @@ import software.sauce.easyledger.cache.model.mapper.AAMapper
 import software.sauce.easyledger.interactors.app.Auth
 import software.sauce.easyledger.interactors.app.SyncCompanyAA
 import software.sauce.easyledger.interactors.app.SyncCompanyBank
+import software.sauce.easyledger.presentation.utils.AsyncEvent
 import software.sauce.easyledger.presentation.utils.ConnectivityManager
 import javax.inject.Inject
 
@@ -43,6 +43,7 @@ constructor(
 ): ViewModel(){
     val isConsentRequired: MutableState<Boolean> = mutableStateOf(false)
     val onLoad: MutableState<Boolean> = mutableStateOf(false)
+    val getTermDeposit: MutableState<Boolean> = mutableStateOf(false)
 
     private var _companyBankTransactions: MutableStateFlow<List<BankTransactionLineEntity>> = MutableStateFlow(ArrayList())
     val companyBankTransactions: StateFlow<List<BankTransactionLineEntity>> get() = _companyBankTransactions
@@ -60,22 +61,22 @@ constructor(
     val companyTodayDebit: StateFlow<Long> get() = _companyTodayDebit
 
     private val allowedDates = listOf(
-        TodayDate("Sep 13", DateTimeConverters.stringToDate("2021-09-13T01:00:17+00:00")),
-        TodayDate("Sep 14", DateTimeConverters.stringToDate("2021-09-14T01:00:17+00:00")),
-        TodayDate("Sep 15", DateTimeConverters.stringToDate("2021-09-15T01:00:17+00:00")),
-        TodayDate("Sep 16", DateTimeConverters.stringToDate("2021-09-16T01:00:17+00:00")),
-        TodayDate("Sep 17", DateTimeConverters.stringToDate("2021-09-17T01:00:17+00:00")),
-        TodayDate("Sep 18", DateTimeConverters.stringToDate("2021-09-18T01:00:17+00:00")),
-        TodayDate("Sep 19", DateTimeConverters.stringToDate("2021-09-19T01:00:17+00:00")),
-        TodayDate("Sep 20", DateTimeConverters.stringToDate("2021-09-20T01:00:17+00:00")),
-        TodayDate("Sep 21", DateTimeConverters.stringToDate("2021-09-21T01:00:17+00:00")),
-        TodayDate("Sep 22", DateTimeConverters.stringToDate("2021-09-22T01:00:17+00:00")),
-        TodayDate("Sep 23", DateTimeConverters.stringToDate("2021-09-23T01:00:17+00:00")),
-        TodayDate("Sep 24", DateTimeConverters.stringToDate("2021-09-24T01:00:17+00:00")),
-        TodayDate("Sep 25", DateTimeConverters.stringToDate("2021-09-25T01:00:17+00:00")),
-        TodayDate("Sep 26", DateTimeConverters.stringToDate("2021-09-26T01:00:17+00:00")),
-        TodayDate("Sep 27", DateTimeConverters.stringToDate("2021-09-27T01:00:17+00:00")),
-        TodayDate("Sep 28", DateTimeConverters.stringToDate("2021-09-28T01:00:17+00:00")),
+//        TodayDate("Sep 13", DateTimeConverters.stringToDate("2021-09-13T01:00:17+00:00")),
+//        TodayDate("Sep 14", DateTimeConverters.stringToDate("2021-09-14T01:00:17+00:00")),
+//        TodayDate("Sep 15", DateTimeConverters.stringToDate("2021-09-15T01:00:17+00:00")),
+//        TodayDate("Sep 16", DateTimeConverters.stringToDate("2021-09-16T01:00:17+00:00")),
+//        TodayDate("Sep 17", DateTimeConverters.stringToDate("2021-09-17T01:00:17+00:00")),
+//        TodayDate("Sep 18", DateTimeConverters.stringToDate("2021-09-18T01:00:17+00:00")),
+//        TodayDate("Sep 19", DateTimeConverters.stringToDate("2021-09-19T01:00:17+00:00")),
+//        TodayDate("Sep 20", DateTimeConverters.stringToDate("2021-09-20T01:00:17+00:00")),
+//        TodayDate("Sep 21", DateTimeConverters.stringToDate("2021-09-21T01:00:17+00:00")),
+//        TodayDate("Sep 22", DateTimeConverters.stringToDate("2021-09-22T01:00:17+00:00")),
+//        TodayDate("Sep 23", DateTimeConverters.stringToDate("2021-09-23T01:00:17+00:00")),
+//        TodayDate("Sep 24", DateTimeConverters.stringToDate("2021-09-24T01:00:17+00:00")),
+//        TodayDate("Sep 25", DateTimeConverters.stringToDate("2021-09-25T01:00:17+00:00")),
+//        TodayDate("Sep 26", DateTimeConverters.stringToDate("2021-09-26T01:00:17+00:00")),
+//        TodayDate("Sep 27", DateTimeConverters.stringToDate("2021-09-27T01:00:17+00:00")),
+//        TodayDate("Sep 28", DateTimeConverters.stringToDate("2021-09-28T01:00:17+00:00")),
         TodayDate("Sep 29", DateTimeConverters.stringToDate("2021-09-29T01:00:17+00:00")),
         TodayDate("Sep 30", DateTimeConverters.stringToDate("2021-09-30T01:00:17+00:00")),
         TodayDate("Oct 01", DateTimeConverters.stringToDate("2021-10-01T01:00:17+00:00")),
@@ -96,6 +97,36 @@ constructor(
 
     fun setCompanyUUID(uuid: String) {
         selectedCompanyUUID = uuid
+    }
+
+    fun getTermDeposit(companyUUID: String, callback: (String?, String?) -> Unit) {
+        val authEventChannel = Channel<AsyncEvent<Boolean>>(Channel.BUFFERED)
+        val authEventsFlow = authEventChannel.receiveAsFlow()
+        authEventsFlow.onEach {
+            when(it) {
+                is AsyncEvent.Success -> {
+                    callback(null, null)
+                }
+                is AsyncEvent.Error -> {
+                    callback(null, "Failed to login. Please check your OTP.")
+                }
+            }
+        }.launchIn(viewModelScope)
+        viewModelScope.launch {
+            try {
+                val companyAAStream = companyDao.getStreamAA(companyUUID)
+                companyAAStream.collectLatest { companyWithAAandLedger ->
+                    if (companyWithAAandLedger.aa?.term != null) {
+                        authEventChannel.send(AsyncEvent.Success(true))
+                    } else {
+                        authEventChannel.send(AsyncEvent.Error("No term deposit"))
+                    }
+                }
+            } catch (e: Exception) {
+                FirebaseCrashlytics.getInstance().recordException(e)
+            }
+        }
+
     }
 
     fun getCompanyDeposit() {

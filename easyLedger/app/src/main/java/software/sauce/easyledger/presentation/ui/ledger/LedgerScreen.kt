@@ -6,8 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,8 +24,19 @@ import software.sauce.easyledger.presentation.ui.home.CompanyViewModel
 fun LedgerScreen(
     onNavigation: (String) -> Unit,
     viewModel: CompanyViewModel,
-    onLoad: Boolean
+    onLoad: Boolean,
+    partnerUUID: String
 ) {
+    val getTermDeposit = viewModel.getTermDeposit.value
+    var hasTermDeposit by remember {
+        mutableStateOf(false)
+    }
+    if (!getTermDeposit) {
+        viewModel.getTermDeposit.value = true
+        viewModel.getTermDeposit(partnerUUID) { _, error ->
+            hasTermDeposit = error == null
+        }
+    }
     EasyLedgerTheme()
     {
         Scaffold(backgroundColor = DeepBlue,
@@ -44,7 +54,7 @@ fun LedgerScreen(
                 )
             }
         ) {
-            LedgerScreenComponent(viewModel, onNavigation, onLoad)
+            LedgerScreenComponent(viewModel, onNavigation, hasTermDeposit)
         }
     }
 }
@@ -53,12 +63,10 @@ fun LedgerScreen(
 fun LedgerScreenComponent(
     viewModel: CompanyViewModel,
     onNavigation: (String) -> Unit,
-    onLoad: Boolean
+    hasTermDeposit: Boolean
 ) {
     val currentDate = viewModel.currentDate.collectAsState().value
     val currentBalance = viewModel.companyCurrentBalance.collectAsState().value
-    val todayCredit = viewModel.companyTodayCredit.collectAsState().value
-    val todayDebit = viewModel.companyTodayDebit.collectAsState().value
     val ledgerTrans = viewModel.companyLedgerEntry.collectAsState().value
     Box(
         modifier = Modifier
@@ -71,8 +79,7 @@ fun LedgerScreenComponent(
             })
             LedgerSummaryComponent(
                 bankBalance=currentBalance,
-                todaysIn = todayCredit.toString(),
-                todaysOut = todayDebit.toString()
+                hasTermDeposit=hasTermDeposit
             )
             LedgerEntries(ledgerTrans)
         }
@@ -157,8 +164,7 @@ fun LedgerEntries(entries: List<LedgerEntity>) {
 fun LedgerSummaryComponent(
     color: Color = GhostWhite,
     bankBalance: Long = 1000,
-    todaysIn: String = "100",
-    todaysOut: String = "200"
+    hasTermDeposit: Boolean
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -188,37 +194,16 @@ fun LedgerSummaryComponent(
         }
         Divider(color = LightGray, thickness = 1.dp)
         Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround,
-            modifier = Modifier.fillMaxWidth()
-        ) {
+        if (hasTermDeposit) {
             Text(
-                text = "Today In",
+                text = "No Credit Risk",
                 style = MaterialTheme.typography.h3,
                 color = Gray
             )
+        } else {
             Text(
-                text = todaysIn,
-                style = MaterialTheme.typography.h2,
-                color = CurrencyRed
-            )
-        }
-        Divider(color = LightGray, thickness = 1.dp)
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = "Today Out",
+                text = "Credit Risk",
                 style = MaterialTheme.typography.h3,
-                color = Gray
-            )
-            Text(
-                text = todaysOut,
-                style = MaterialTheme.typography.h2,
                 color = CurrencyRed
             )
         }

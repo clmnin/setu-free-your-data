@@ -96,7 +96,8 @@ class MainActivity : ComponentActivity() {
                         LedgerScreen(
                             onNavigation = navController::navigate,
                             viewModel = companyViewModel,
-                            false
+                            false,
+                            partnerUUID = navBackStackEntry.arguments?.getString("partner_uuid") ?: "",
                         )
                     }
                     composable(

@@ -59,8 +59,6 @@ fun HomeScreenComponents(
 ) {
     val isConsentRequired = viewModel.isConsentRequired.value
     val currentDate = viewModel.currentDate.collectAsState().value
-    val todayCredit = viewModel.companyTodayCredit.collectAsState().value
-    val todayDebit = viewModel.companyTodayDebit.collectAsState().value
     val currentBalance = viewModel.companyCurrentBalance.collectAsState().value
     val partners = viewModel.companyLedgerCompanies.collectAsState().value
     if (!onLoad) {
@@ -85,8 +83,6 @@ fun HomeScreenComponents(
             } else {
                 BankBalanceComponent(
                     bankBalance = currentBalance,
-                    todayIn = todayCredit.toString(),
-                    todayOut = todayDebit.toString(),
                     onClick = {
                         val currentCompany = viewModel.selectedCompanyUUID
                         if (currentCompany != null) {
@@ -157,8 +153,6 @@ fun LinkBankAccount(
 fun BankBalanceComponent(
     color: Color = GhostWhite,
     bankBalance: Long = 1000,
-    todayIn: String = "100",
-    todayOut: String = "200",
     onClick: () -> Unit
 ) {
     Column(
@@ -173,7 +167,7 @@ fun BankBalanceComponent(
             .clickable(onClick = onClick)
     ) {
         Text(
-            text = "In Bank",
+            text = "Bank Balance",
             style = MaterialTheme.typography.h2,
             color = Gray
         )
@@ -184,42 +178,5 @@ fun BankBalanceComponent(
         )
         Divider(color = LightGray, thickness = 1.dp)
         Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(horizontal = 20.dp)
-            ) {
-                Text(
-                    text = todayIn,
-                    style = MaterialTheme.typography.h2,
-                    color = CurrencyGreen
-                )
-                Text(
-                    text = "Today's Out",
-                    style = MaterialTheme.typography.h3,
-                    color = Gray
-                )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(horizontal = 20.dp)
-            ) {
-                Text(
-                    text = todayOut,
-                    style = MaterialTheme.typography.h2,
-                    color = CurrencyRed
-                )
-                Text(
-                    text = "Today's In",
-                    style = MaterialTheme.typography.h3,
-                    color = Gray
-                )
-            }
-        }
     }
 }
