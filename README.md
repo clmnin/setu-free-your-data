@@ -15,6 +15,8 @@ Login             |  List of businesses | Bank transactions | Accounts ledger
 <img src="./docs/1.jpg" alt="Login" width="200"/>  |  <img src="./docs/2.jpg" alt="List of businesses" width="200"/> | <img src="./docs/3.jpg" alt="Bank transactions" width="200"/> | <img src="./docs/4.jpg" alt="Login" width="200"/>
 
 ## Tech stack
+
+### Android
 * Minimum SDK level 26
 * 100% Kotlin based + Coroutines + Flow for asynchronous
 * Hilt for dependency injection.
@@ -25,3 +27,12 @@ Login             |  List of businesses | Bank transactions | Accounts ledger
   * Room Persistence - construct database.
 * Architecture
   * MVVM Architecture (Declarative View - ViewModel - Model)
+
+### Backend
+* Python with types hints
+* FastAPI
+* [Edgedb](https://www.edgedb.com/)
+  * Next-Gen database
+  * A whole new language to interact with the database - [EdgeQL](https://www.edgedb.com/docs/edgeql/index)
+  * High performance queries, effortlessly
+  * Build in migrations
