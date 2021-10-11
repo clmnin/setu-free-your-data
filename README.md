@@ -10,4 +10,18 @@ Our app helps SMEs track their ledgers, track bank transactions and automaticall
 
 ## Screenshots
 
+Login             |  List of businesses | Bank transactions | Accounts ledger
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+<img src="./docs/1.jpg" alt="Login" width="200"/>  |  <img src="./docs/2.jpg" alt="List of businesses" width="200"/> | <img src="./docs/3.jpg" alt="Bank transactions" width="200"/> | <img src="./docs/4.jpg" alt="Login" width="200"/>
 
+## Tech stack
+* Minimum SDK level 26
+* 100% Kotlin based + Coroutines + Flow for asynchronous
+* Hilt for dependency injection.
+* JetPack
+  * Compose - A modern toolkit for building native Android UI.
+  * Lifecycle - dispose observing data when lifecycle state changes.
+  * ViewModel - UI related data holder, lifecycle aware.
+  * Room Persistence - construct database.
+* Architecture
+  * MVVM Architecture (Declarative View - ViewModel - Model)
