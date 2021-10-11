@@ -78,7 +78,6 @@ fun LedgerScreenComponent(
                 viewModel.nextDate()
             })
             LedgerSummaryComponent(
-                bankBalance=currentBalance,
                 hasTermDeposit=hasTermDeposit
             )
             LedgerEntries(ledgerTrans)
@@ -163,7 +162,6 @@ fun LedgerEntries(entries: List<LedgerEntity>) {
 @Composable
 fun LedgerSummaryComponent(
     color: Color = GhostWhite,
-    bankBalance: Long = 1000,
     hasTermDeposit: Boolean
 ) {
     Column(
@@ -176,22 +174,6 @@ fun LedgerSummaryComponent(
             .padding(horizontal = 15.dp, vertical = 20.dp)
             .fillMaxWidth()
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = "Net Balance",
-                style = MaterialTheme.typography.h1,
-                color = Gray
-            )
-            Text(
-                text = bankBalance.toString(),
-                style = MaterialTheme.typography.h1,
-                color = if (bankBalance > 0) CurrencyGreen else CurrencyRed
-            )
-        }
         Divider(color = LightGray, thickness = 1.dp)
         Spacer(modifier = Modifier.height(16.dp))
         if (hasTermDeposit) {

@@ -30,20 +30,11 @@ import javax.inject.Inject
 class CompanyViewModel
 @Inject
 constructor(
-    private val auth: Auth,
-    private val syncCompanyAA: SyncCompanyAA,
-    private val syncCompanyBank: SyncCompanyBank,
-    private val userDao: UserDao,
     private val companyDao: CompanyDao,
-    private val aADao: AADao,
-    private val userWithCompanyDao: UserWithCompanyDao,
-    private val AAMapper: AAMapper,
-    private val connectivityManager: ConnectivityManager,
-    private val state: SavedStateHandle,
 ): ViewModel(){
     val isConsentRequired: MutableState<Boolean> = mutableStateOf(false)
     val onLoad: MutableState<Boolean> = mutableStateOf(false)
-    val getTermDeposit: MutableState<Boolean> = mutableStateOf(false)
+    val getTermDeposit: MutableState<Boolean> = mutableStateOf(true)
 
     private var _companyBankTransactions: MutableStateFlow<List<BankTransactionLineEntity>> = MutableStateFlow(ArrayList())
     val companyBankTransactions: StateFlow<List<BankTransactionLineEntity>> get() = _companyBankTransactions
